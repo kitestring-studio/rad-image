@@ -116,7 +116,7 @@ function dicom_viewer_enqueue_scripts() {
 		$image_dir_path_final = get_backtrack_url( $image_url, $request_url );
 
 		// a = depth, b= rotation, c = gallery
-		$type = "b";
+		$type = get_field( 'type', $post_id );;
 
 		$dynamic_data = array(
 			'vCount' =>  ( $type === 'a' ) ? $image_count : 1,
