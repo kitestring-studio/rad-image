@@ -76,26 +76,32 @@ function custom_post_type_shortcode( $atts ) {
 
 function dicom_shortcode_func( $atts) {
 	$atts = shortcode_atts(
-		array(
-			'id' => '',
-		),
+		array( 'id' => '' ),
 		$atts,
 		'custom_post_type'
 	);
 
-	$post_id = $atts['id'];
+	$post_id = (int) $atts['id'];
+
+	if ( get_post_type( $post_id ) !== 'dicom' ) {
+		return '';
+	}
+
+	add_action( 'wp_enqueue_scripts', 'dicom_viewer_enqueue_scripts' );
+
 
 	$image_set_title = get_field( 'image_set_title', $post_id );
-	$images = get_field( 'images', $post_id );
-	sort($images);
+	$images          = get_field( 'images', $post_id );
+	sort( $images );
 
-	$image_count = count($images);
-	$one_image_id = (int) $images[$image_count-1]; // @TODO this doesn't work because the images are not sorted
+	$image_count       = count( $images );
+	$one_image_id      = (int) $images[ $image_count - 1 ]; // @TODO this doesn't work because the images are not sorted
 	$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
 
 	// include the template from include/dicom-template.php
 	ob_start();
 	include plugin_dir_path( __FILE__ ) . 'include/dicom-template.php';
+
 	return ob_get_clean();
 
 }
@@ -139,7 +145,6 @@ function dicom_viewer_enqueue_scripts() {
 		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
 	}
 }
-add_action( 'wp_enqueue_scripts', 'dicom_viewer_enqueue_scripts' );
 
 
 /**
