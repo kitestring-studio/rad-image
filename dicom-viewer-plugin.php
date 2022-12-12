@@ -87,6 +87,8 @@ function dicom_shortcode_func( $atts) {
 
 	$image_set_title = get_field( 'image_set_title', $post_id );
 	$images = get_field( 'images', $post_id );
+	sort($images);
+
 	$image_count = count($images);
 	$one_image_id = (int) $images[$image_count-1]; // @TODO this doesn't work because the images are not sorted
 	$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
