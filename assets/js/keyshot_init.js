@@ -10,14 +10,14 @@ function initKeyShotXR() {
 	var backgroundColor = "#FFFFFF";
 	// var uCount = 40; // get count from items uploaded to gallery field
 	var uCount = parseInt(dicom_viewer_data.uCount);
-	var vCount = dicom_viewer_data.uCount;
+	var vCount = parseInt(dicom_viewer_data.vCount);
 	var uWrap = false;
 	var vWrap = false;
 	var uMouseSensitivity = -0.05;
 	var vMouseSensitivity = 0.05;
 	// var uStartIndex = 39;// Will the starting frame always be the largest file number?
-	var uStartIndex = dicom_viewer_data.uStartIndex;
-	var vStartIndex = dicom_viewer_data.vStartIndex;
+	var uStartIndex = parseInt(dicom_viewer_data.uStartIndex);
+	var vStartIndex = parseInt(dicom_viewer_data.vStartIndex);
 	var minZoom = 1;
 	var maxZoom = 2; //disable for depth zoom
 	var rotationDamping = 0.8;
