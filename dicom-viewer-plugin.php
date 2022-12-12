@@ -112,3 +112,47 @@ function dicom_viewer_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'dicom_viewer_enqueue_scripts' );
 
+
+
+function wp_custom_upload_dir( $param ) {
+	// Check if this is a dicom post and if the images field is being used
+	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+	$field_name = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
+	if ( 'dicom' !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_name ) {
+		return $param;
+	}
+
+	// Set a custom upload directory
+	$time = current_time( 'mysql' );
+	$y = substr( $time, 0, 4 );
+	$m = substr( $time, 5, 2 );
+	$param['path'] = $param['basedir'] . "/$y/$m/dicom-$post_id";
+	$param['url'] = $param['baseurl'] . "/$y/$m/dicom-$post_id";
+	return $param;
+}
+add_filter( 'upload_dir', 'wp_custom_upload_dir' );
+
+function wp_custom_upload_dir2( $errors, $file, $field ) {
+	// Get the field name of the current upload
+	if ( 'images' !== $field['name'] ) {
+		return $errors;
+	}
+
+	// Check if this is a dicom post
+//	$post_id = isset( $field['post_id'] ) ? intval( $field['post_id'] ) : 0;
+	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+
+	if ( 'dicom' !== get_post_type( $post_id ) ) {
+		return $errors;
+	}
+
+	// Set a custom upload directory
+	$time = current_time( 'mysql' );
+	$y = substr( $time, 0, 4 );
+	$m = substr( $time, 5, 2 );
+	$file['path'] = $file['basedir'] . "/$y/$m";
+	$file['url'] = $file['baseurl'] . "/$y/$m";
+	return $errors;
+}
+//add_filter( 'acf/upload_prefilter', 'wp_custom_upload_dir2', 10, 3 );
+
