@@ -103,14 +103,59 @@ function dicom_viewer_enqueue_scripts() {
 
 		$image_array = get_field( 'images', $post_id );
 		$image_count = count($image_array);
+		$one_image_id = (int) $image_array[0];
+
+		// get the image URL
+		$image_url = wp_get_attachment_url( $one_image_id, 'full' );
+
+
+		// get relative url of the page that requested the image
+		$request_url = wp_make_link_relative( get_permalink() );
+
+
+		$image_dir_path_final = get_backtrack_url( $image_url, $request_url );
+
 
 		$dynamic_data = array(
-			'image_set_count' => $image_count
+			'image_set_count' => $image_count,
+			'folderName' => $image_dir_path_final,
 		);
 		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'dicom_viewer_enqueue_scripts' );
+
+
+/**
+ * @param bool|string $image_url
+ * @param string $request_url
+ *
+ * @return string
+ */
+function get_backtrack_url( string $image_url, string $request_url ): string {
+	$image_root_relative_url = wp_make_link_relative( $image_url );
+
+
+	// get relative path of upload directory
+	$upload_dir          = wp_make_link_relative( wp_upload_dir()['baseurl'] );
+	$image_relative_path = _wp_get_attachment_relative_path( $image_url );
+	$image_dir_path      = "$upload_dir/$image_relative_path";
+
+	// split the $request url into an array, and remove empty elements
+	$request_url_array = array_filter( explode( '/', $request_url ) );
+
+
+	// delete empty array elements, and then create a backtrack string for $image_dir_path
+
+	$backtrack_string = implode( '', array_map( function ( $element ) {
+		return '../';
+	}, $request_url_array ) );
+
+	// create the final path to the image directory
+	$image_dir_path_final = untrailingslashit( $backtrack_string ) . $image_dir_path;
+
+	return $image_dir_path_final;
+}
 
 
 
@@ -166,3 +211,5 @@ function wpse_133794_remove_image_sizes( $sizes ) {
 	return $sizes;
 }
 add_filter( 'intermediate_image_sizes_advanced', 'wpse_133794_remove_image_sizes', 1000 );
+
+
