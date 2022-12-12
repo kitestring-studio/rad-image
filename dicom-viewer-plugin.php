@@ -202,6 +202,7 @@ function wp_custom_upload_dir2( $errors, $file, $field ) {
 //add_filter( 'acf/upload_prefilter', 'wp_custom_upload_dir2', 10, 3 );
 
 // prevent wordpress from creating alternate image resolutions for "dicom" custom post type
+// @TODO add thumbnail size back in
 function wpse_133794_remove_image_sizes( $sizes ) {
 	$post_id = (int) $_REQUEST['post_id'] ?? 0;
 

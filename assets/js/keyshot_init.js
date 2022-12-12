@@ -3,7 +3,8 @@ var keyshotXR;
 function initKeyShotXR() {
 	console.log(dicom_viewer_data.image_set_count)
 	var nameOfDiv = "KeyShotXR";
-	var folderName = "../../wp-content/uploads/2022/12"; //will need to calculate the number of parent folders in the path
+	// var folderName = "../../wp-content/uploads/2022/12"; //will need to calculate the number of parent folders in the path
+	var folderName = dicom_viewer_data.folderName;
 	var viewPortWidth = 900;
 	var viewPortHeight = 900;
 	var backgroundColor = "#FFFFFF";
