@@ -74,51 +74,80 @@ function custom_post_type_shortcode( $atts ) {
 	return $output;
 }
 
-function dicom_shortcode_func( $atts) {
-	$atts = shortcode_atts(
-		array( 'id' => '' ),
-		$atts,
-		'custom_post_type'
-	);
+class Dicom_Viewer {
+	function __construct() {
+//		add_shortcode( 'custom_post_type', 'custom_post_type_shortcode' );
 
-	$post_id = (int) $atts['id'];
+		$this->set_hooks();
 
-	if ( get_post_type( $post_id ) !== 'dicom' ) {
-		return '';
 	}
 
-	add_action( 'wp_enqueue_scripts', 'dicom_viewer_enqueue_scripts' );
+	/**
+	 * @return void
+	 */
+	protected function set_hooks(): void {
+		add_shortcode( 'dicom', array( $this, 'dicom_shortcode_func' ) );
+		add_filter( 'upload_dir', array( $this, 'wp_custom_upload_dir' ) );
+		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'remove_image_sizes' ), 1000 );
+	}
 
 
-	$image_set_title = get_field( 'image_set_title', $post_id );
-	$images          = get_field( 'images', $post_id );
-	sort( $images );
+	public function dicom_shortcode_func( $atts ) {
+		$atts = shortcode_atts(
+			array( 'id' => '' ),
+			$atts,
+			'custom_post_type'
+		);
 
-	$image_count       = count( $images );
-	$one_image_id      = (int) $images[ $image_count - 1 ]; // @TODO this doesn't work because the images are not sorted
-	$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
+		$post_id = (int) $atts['id'];
+		if ( get_post_type( $post_id ) !== 'dicom' ) {
+			return '';
+		}
+		$this->dicom_id = $post_id;
 
-	// include the template from include/dicom-template.php
-	ob_start();
-	include plugin_dir_path( __FILE__ ) . 'include/dicom-template.php';
+		$type = get_field( 'type', $post_id );
+		if ( ! in_array( $type, array( 'a', 'b', 'c' ) ) ) {
+			return '';
+		}
 
-	return ob_get_clean();
 
-}
+		$image_set_title = get_field( 'image_set_title', $post_id );
+		$images          = get_field( 'images', $post_id );
+		sort( $images );
 
-add_shortcode( 'dicom', 'dicom_shortcode_func' );
+		$image_count       = count( $images );
+		$one_image_id      = (int) $images[ $image_count - 1 ];
+		$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
 
-function dicom_viewer_enqueue_scripts() {
-	if ( is_singular( 'dicom' ) ) {
+		switch ( $type ) {
+			case 'a':
+			case 'b':
+				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_scripts') );
+
+				ob_start();
+				include plugin_dir_path( __FILE__ ) . 'include/dicom-template.php';
+
+				return ob_get_clean();
+				break;
+			case 'c':
+				$shortcode = '[dcm src="' . $placeholder_image . '" mode="3d" mode3d="mpr"]';
+				break;
+		}
+
+
+	}
+
+
+	function dicom_viewer_enqueue_scripts() {
+//	if ( is_singular( 'dicom' ) ) {
 		$plugin_root_url = plugin_dir_url( __FILE__ );
 		wp_enqueue_script( 'keyshotxr', $plugin_root_url . 'assets/js/KeyShotXR.js', array(), '1.0' );
 		wp_enqueue_script( 'keyshot-init', $plugin_root_url . 'assets/js/keyshot_init.js', array(), '1.0', true );
 
-		// get the post ID
-		$post_id = get_the_ID();
+		$post_id = $this->dicom_id;
 
-		$image_array = get_field( 'images', $post_id );
-		$image_count = count($image_array);
+		$image_array  = get_field( 'images', $post_id );
+		$image_count  = count( $image_array );
 		$one_image_id = (int) $image_array[0];
 
 		// get the image URL
@@ -129,109 +158,113 @@ function dicom_viewer_enqueue_scripts() {
 		$request_url = wp_make_link_relative( get_permalink() );
 
 
-		$image_dir_path_final = get_backtrack_url( $image_url, $request_url );
+		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
 
 		// a = depth, b= rotation, c = gallery
 		$type = get_field( 'type', $post_id );;
 
 		$dynamic_data = array(
-			'vCount' =>  ( $type === 'a' ) ? $image_count : 1,
-			'uCount' => ( $type === 'b' ) ? $image_count : 1,
-			'vStartIndex' => ( $type === 'a' ) ? $image_count-1 : 0,
-			'uStartIndex' => ( $type === 'b' ) ? $image_count-1 : 0,
-			'maxZoom' => ( $type === 'b' ) ? 2 : 1,
-			'folderName' => $image_dir_path_final,
+			'vCount'      => ( $type === 'a' ) ? $image_count : 1,
+			'uCount'      => ( $type === 'b' ) ? $image_count : 1,
+			'vStartIndex' => ( $type === 'a' ) ? $image_count - 1 : 0,
+			'uStartIndex' => ( $type === 'b' ) ? $image_count - 1 : 0,
+			'maxZoom'     => ( $type === 'b' ) ? 2 : 1,
+			'folderName'  => $image_dir_path_final,
 		);
 		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
+//	}
 	}
-}
 
 
-/**
- * @param bool|string $image_url
- * @param string $request_url
- *
- * @return string
- */
-function get_backtrack_url( string $image_url, string $request_url ): string {
-	$image_root_relative_url = wp_make_link_relative( $image_url );
+	/**
+	 * @param bool|string $image_url
+	 * @param string $request_url
+	 *
+	 * @return string
+	 */
+	function get_backtrack_url( string $image_url, string $request_url ): string {
+		$image_root_relative_url = wp_make_link_relative( $image_url );
 
 
-	// get relative path of upload directory
-	$upload_dir          = wp_make_link_relative( wp_upload_dir()['baseurl'] );
-	$image_relative_path = _wp_get_attachment_relative_path( $image_url );
-	$image_dir_path      = "$upload_dir/$image_relative_path";
+		// get relative path of upload directory
+		$upload_dir          = wp_make_link_relative( wp_upload_dir()['baseurl'] );
+		$image_relative_path = _wp_get_attachment_relative_path( $image_url );
+		$image_dir_path      = "$upload_dir/$image_relative_path";
 
-	// split the $request url into an array, and remove empty elements
-	$request_url_array = array_filter( explode( '/', $request_url ) );
-
-
-	// delete empty array elements, and then create a backtrack string for $image_dir_path
-
-	$backtrack_string = implode( '', array_map( function ( $element ) {
-		return '../';
-	}, $request_url_array ) );
-
-	// create the final path to the image directory
-	$image_dir_path_final = untrailingslashit( $backtrack_string ) . $image_dir_path;
-
-	return $image_dir_path_final;
-}
+		// split the $request url into an array, and remove empty elements
+		$request_url_array = array_filter( explode( '/', $request_url ) );
 
 
+		// delete empty array elements, and then create a backtrack string for $image_dir_path
 
-function wp_custom_upload_dir( $param ) {
-	// Check if this is a dicom post and if the images field is being used
-	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
-	$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
-	if ( 'dicom' !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
+		$backtrack_string = implode( '', array_map( function ( $element ) {
+			return '../';
+		}, $request_url_array ) );
+
+		// create the final path to the image directory
+		$image_dir_path_final = untrailingslashit( $backtrack_string ) . $image_dir_path;
+
+		return $image_dir_path_final;
+	}
+
+
+	public function wp_custom_upload_dir( $param ) {
+		// Check if this is a dicom post and if the images field is being used
+		$post_id   = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+		$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
+		if ( 'dicom' !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
+			return $param;
+		}
+
+		// Set a custom upload directory
+		$time          = current_time( 'mysql' );
+		$y             = substr( $time, 0, 4 );
+		$m             = substr( $time, 5, 2 );
+		$param['path'] = $param['basedir'] . "/$y/$m/dicom-$post_id";
+		$param['url']  = $param['baseurl'] . "/$y/$m/dicom-$post_id";
+
 		return $param;
 	}
 
-	// Set a custom upload directory
-	$time = current_time( 'mysql' );
-	$y = substr( $time, 0, 4 );
-	$m = substr( $time, 5, 2 );
-	$param['path'] = $param['basedir'] . "/$y/$m/dicom-$post_id";
-	$param['url'] = $param['baseurl'] . "/$y/$m/dicom-$post_id";
-	return $param;
-}
-add_filter( 'upload_dir', 'wp_custom_upload_dir' );
+	function wp_custom_upload_dir2( $errors, $file, $field ) {
+		// Get the field name of the current upload
+		if ( 'images' !== $field['name'] ) {
+			return $errors;
+		}
 
-function wp_custom_upload_dir2( $errors, $file, $field ) {
-	// Get the field name of the current upload
-	if ( 'images' !== $field['name'] ) {
-		return $errors;
-	}
-
-	// Check if this is a dicom post
+		// Check if this is a dicom post
 //	$post_id = isset( $field['post_id'] ) ? intval( $field['post_id'] ) : 0;
-	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
+		$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
 
-	if ( 'dicom' !== get_post_type( $post_id ) ) {
+		if ( 'dicom' !== get_post_type( $post_id ) ) {
+			return $errors;
+		}
+
+		// Set a custom upload directory
+		$time         = current_time( 'mysql' );
+		$y            = substr( $time, 0, 4 );
+		$m            = substr( $time, 5, 2 );
+		$file['path'] = $file['basedir'] . "/$y/$m";
+		$file['url']  = $file['baseurl'] . "/$y/$m";
+
 		return $errors;
 	}
-
-	// Set a custom upload directory
-	$time = current_time( 'mysql' );
-	$y = substr( $time, 0, 4 );
-	$m = substr( $time, 5, 2 );
-	$file['path'] = $file['basedir'] . "/$y/$m";
-	$file['url'] = $file['baseurl'] . "/$y/$m";
-	return $errors;
-}
 //add_filter( 'acf/upload_prefilter', 'wp_custom_upload_dir2', 10, 3 );
 
 // prevent wordpress from creating alternate image resolutions for "dicom" custom post type
 // @TODO add thumbnail size back in
-function wpse_133794_remove_image_sizes( $sizes ) {
-	$post_id = (int) $_REQUEST['post_id'] ?? 0;
+	function remove_image_sizes( $sizes ) {
+		$post_id = (int) $_REQUEST['post_id'] ?? 0;
 
-	if ( 'dicom' === get_post_type( $post_id ) ) { // @TODO DRY out dicom string
-		return array();
+		if ( 'dicom' === get_post_type( $post_id ) ) { // @TODO DRY out dicom string
+			return array();
+		}
+
+		return $sizes;
 	}
-	return $sizes;
+
+
+
 }
-add_filter( 'intermediate_image_sizes_advanced', 'wpse_133794_remove_image_sizes', 1000 );
 
-
+new Dicom_Viewer();
