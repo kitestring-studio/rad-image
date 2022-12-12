@@ -115,9 +115,15 @@ function dicom_viewer_enqueue_scripts() {
 
 		$image_dir_path_final = get_backtrack_url( $image_url, $request_url );
 
+		// a = depth, b= rotation, c = gallery
+		$type = "b";
 
 		$dynamic_data = array(
-			'image_set_count' => $image_count,
+			'vCount' =>  ( $type === 'a' ) ? $image_count : 1,
+			'uCount' => ( $type === 'b' ) ? $image_count : 1,
+			'vStartIndex' => ( $type === 'a' ) ? $image_count-1 : 0,
+			'uStartIndex' => ( $type === 'b' ) ? $image_count-1 : 0,
+			'maxZoom' => ( $type === 'b' ) ? 2 : 1,
 			'folderName' => $image_dir_path_final,
 		);
 		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
