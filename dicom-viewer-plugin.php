@@ -13,7 +13,7 @@
  */
 
 // exit if file is called directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 
 // Or using acfe/init
@@ -46,20 +46,20 @@ function custom_post_type_shortcode( $atts ) {
 
 	// Get the ACF fields.
 	$image_set_title = get_field( 'image_set_title', $post_id );
-	$images = get_field( 'images', $post_id );
+	$images          = get_field( 'images', $post_id );
 
 	// make an array from ihe ID property of each array element in $images
-	$images_array = array_map(function($image) {
+	$images_array = array_map( function ( $image ) {
 		return $image['ID'];
-	}, $images);
+	}, $images );
 
 	// convert the array to a string
-	$images_list = implode(',', $images_array);
+	$images_list = implode( ',', $images_array );
 
-	$images_urls = array_map(function($image) {
+	$images_urls     = array_map( function ( $image ) {
 		return $image['url'];
-	}, $images);
-	$image_urls_list = implode(',', $images_urls);
+	}, $images );
+	$image_urls_list = implode( ',', $images_urls );
 
 	// Create the output.
 	$output = '';
@@ -122,7 +122,7 @@ class Dicom_Viewer {
 		switch ( $type ) {
 			case 'a':
 			case 'b':
-				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_scripts') );
+				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_scripts' ) );
 
 				ob_start();
 				include plugin_dir_path( __FILE__ ) . 'include/dicom-template.php';
@@ -130,10 +130,9 @@ class Dicom_Viewer {
 				return ob_get_clean();
 				break;
 			case 'c':
-				$shortcode = '[dcm src="' . $placeholder_image . '" mode="3d" mode3d="mpr"]';
+				return do_shortcode( "[gallery ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
-
 
 	}
 
@@ -262,7 +261,6 @@ class Dicom_Viewer {
 
 		return $sizes;
 	}
-
 
 
 }
