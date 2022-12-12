@@ -117,8 +117,8 @@ add_action( 'wp_enqueue_scripts', 'dicom_viewer_enqueue_scripts' );
 function wp_custom_upload_dir( $param ) {
 	// Check if this is a dicom post and if the images field is being used
 	$post_id = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
-	$field_name = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
-	if ( 'dicom' !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_name ) {
+	$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
+	if ( 'dicom' !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
 		return $param;
 	}
 
@@ -156,3 +156,13 @@ function wp_custom_upload_dir2( $errors, $file, $field ) {
 }
 //add_filter( 'acf/upload_prefilter', 'wp_custom_upload_dir2', 10, 3 );
 
+// prevent wordpress from creating alternate image resolutions for "dicom" custom post type
+function wpse_133794_remove_image_sizes( $sizes ) {
+	$post_id = (int) $_REQUEST['post_id'] ?? 0;
+
+	if ( 'dicom' === get_post_type( $post_id ) ) { // @TODO DRY out dicom string
+		return array();
+	}
+	return $sizes;
+}
+add_filter( 'intermediate_image_sizes_advanced', 'wpse_133794_remove_image_sizes', 1000 );
