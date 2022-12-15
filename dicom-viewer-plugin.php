@@ -92,6 +92,9 @@ class Dicom_Viewer {
 		add_shortcode( 'dicom', array( $this, 'dicom_shortcode_func' ) );
 		add_filter( 'upload_dir', array( $this, 'wp_custom_upload_dir' ) );
 		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'remove_image_sizes' ), 1000 );
+
+		// filter gallery_style with a method named gallery_style_func
+		add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 	}
 
 
@@ -133,10 +136,45 @@ class Dicom_Viewer {
 				return ob_get_clean();
 				break;
 			case 'c':
-				return do_shortcode( "[gallery ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+				return do_shortcode( "[gallery size=medium columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
 
+	}
+
+	public function gallery_style_func( $style ) {
+		// check for dicom post type
+		if ( get_post_type( $this->dicom_id ) !== $this->cpt_slug ) {
+			return $style;
+		}
+
+		$style = $this->get_attribute_value($style, 'class');
+		// strip closing </div> tag from the $style string
+		$style = str_replace( '</div>', '', $style );
+
+		return $style;
+	}
+
+	function get_attribute_value( $html_tag, $attribute_name ) {
+		// Create a DOMDocument object and load the HTML string
+		$dom = new DOMDocument();
+		$dom->loadHTML( $html_tag );
+
+		// Use getElementsByTagName() to search for the specified tag
+		$tags = $dom->getElementsByTagName( '*' );
+
+		// Check if any tags were found
+		if ( $tags->length > 0 ) {
+		// Get the first tag found
+			$tag = $tags->item( 2 );
+
+		// Use the getAttribute() method to get the value of the specified attribute
+			$attribute_value = $tag->getAttribute( $attribute_name );
+
+			$tag->setAttribute( $attribute_name, 'is-layout-flex ' . $attribute_value );
+
+			return $dom->saveHTML( $tag );
+		}
 	}
 
 
