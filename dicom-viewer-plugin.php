@@ -75,8 +75,11 @@ function custom_post_type_shortcode( $atts ) {
 }
 
 class Dicom_Viewer {
+	private string $cpt_slug;
+
 	function __construct() {
-//		add_shortcode( 'custom_post_type', 'custom_post_type_shortcode' );
+		$this->cpt_slug = 'dicom';
+		//		add_shortcode( 'custom_post_type', 'custom_post_type_shortcode' );
 
 		$this->set_hooks();
 
@@ -100,7 +103,7 @@ class Dicom_Viewer {
 		);
 
 		$post_id = (int) $atts['id'];
-		if ( get_post_type( $post_id ) !== 'dicom' ) {
+		if ( get_post_type( $post_id ) !== $this->cpt_slug ) {
 			return '';
 		}
 		$this->dicom_id = $post_id;
@@ -211,7 +214,7 @@ class Dicom_Viewer {
 		// Check if this is a dicom post and if the images field is being used
 		$post_id   = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
 		$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
-		if ( 'dicom' !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
+		if ( $this->cpt_slug !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
 			return $param;
 		}
 
@@ -255,7 +258,7 @@ class Dicom_Viewer {
 	function remove_image_sizes( $sizes ) {
 		$post_id = (int) $_REQUEST['post_id'] ?? 0;
 
-		if ( 'dicom' === get_post_type( $post_id ) ) { // @TODO DRY out dicom string
+		if ( $this->cpt_slug === get_post_type( $post_id ) ) {
 			return array();
 		}
 
