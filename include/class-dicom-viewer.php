@@ -130,9 +130,11 @@ class Dicom_Viewer {
 
 	function dicom_viewer_enqueue_scripts() {
 //	if ( is_singular( 'dicom' ) ) {
-		$plugin_root_url = plugin_dir_url( __FILE__  ); // @TODO set this to plugin root file
-		wp_enqueue_script( 'keyshotxr', $plugin_root_url . '../assets/js/KeyShotXR.js', array(), '1.0' );
-		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '../assets/js/keyshot_init.js', array(), '1.0', true );
+		$plugin_root_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
+		do_action( 'qm/debug', ['$plugin_root_url', $plugin_root_url] );
+
+		wp_enqueue_script( 'keyshotxr', qm($plugin_root_url . '/assets/js/KeyShotXR.js'), array(), '1.0', true );
+		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '/assets/js/keyshot_init.js', array(), '1.0', true );
 
 		$post_id = $this->dicom_id;
 

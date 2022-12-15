@@ -7,7 +7,7 @@
  * Author URI:      https://kitestring.studio
  * Text Domain:     dicom-viewer-plugin
  * Domain Path:     /languages
- * Version:         0.1.1
+ * Version:         0.1.2
  *
  * @package         Dicom_Viewer_Plugin
  */
@@ -21,4 +21,10 @@ require_once plugin_dir_path( __FILE__ ) . 'include/class-dicom-viewer.php';
 
 if( function_exists('acf_add_local_field_group') ){
 	new Dicom_Viewer();
+}
+
+function qm( string $input) {
+	do_action( 'qm/info', [$input] );
+
+	return $input;
 }
