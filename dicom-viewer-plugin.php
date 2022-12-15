@@ -136,7 +136,7 @@ class Dicom_Viewer {
 				return ob_get_clean();
 				break;
 			case 'c':
-				return do_shortcode( "[gallery size=medium columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+				return do_shortcode( "[gallery size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
 
@@ -148,15 +148,22 @@ class Dicom_Viewer {
 			return $style;
 		}
 
-		$style = $this->get_attribute_value($style, 'class');
+		$style = $this->set_attribute_value($style, 'class', 'is-layout-flex');
 		// strip closing </div> tag from the $style string
 		$style = str_replace( '</div>', '', $style );
 
 		return $style;
 	}
 
-	function get_attribute_value( $html_tag, $attribute_name ) {
-		// Create a DOMDocument object and load the HTML string
+	/**
+	 * @param $html_tag
+	 * @param $attribute_name
+	 * @param $new_value
+	 * @param $position - 'before' or 'after'
+	 *
+	 * @return false|mixed|string
+	 */
+	function set_attribute_value( $html_tag, $attribute_name, $new_value, $position = null ) {
 		$dom = new DOMDocument();
 		$dom->loadHTML( $html_tag );
 
@@ -165,15 +172,27 @@ class Dicom_Viewer {
 
 		// Check if any tags were found
 		if ( $tags->length > 0 ) {
-		// Get the first tag found
+			// Get the first tag found, after html & body
 			$tag = $tags->item( 2 );
 
-		// Use the getAttribute() method to get the value of the specified attribute
 			$attribute_value = $tag->getAttribute( $attribute_name );
 
-			$tag->setAttribute( $attribute_name, 'is-layout-flex ' . $attribute_value );
+			switch ( $position ) {
+				case $position === 'start':
+					$attribute_value = $new_value . ' ' . $attribute_value;
+					break;
+				case $position === 'end':
+					$attribute_value = $attribute_value . ' ' . $new_value;
+					break;
+				default:
+					$attribute_value = $new_value;
+			}
+
+			$tag->setAttribute( $attribute_name, $attribute_value );
 
 			return $dom->saveHTML( $tag );
+		} else {
+			return $html_tag;
 		}
 	}
 
