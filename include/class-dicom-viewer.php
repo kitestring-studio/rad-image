@@ -1,4 +1,5 @@
 <?php
+
 class Dicom_Viewer {
 	private string $cpt_slug;
 
@@ -40,7 +41,11 @@ class Dicom_Viewer {
 			return '';
 		}
 
+		//get caption field
+		$caption = get_field( 'image_set_caption', $post_id );
+
 		ob_start();
+		echo "<div class='dicom-viewer__wrapper'>";
 
 		$show_title = get_field( 'display_set_title', $post_id );
 		if ( $show_title ) {
@@ -49,7 +54,7 @@ class Dicom_Viewer {
 		}
 
 
-		$images          = get_field( 'images', $post_id );
+		$images = get_field( 'images', $post_id );
 
 		$image_count       = count( $images );
 		$one_image_id      = (int) $images[ $image_count - 1 ];
@@ -65,9 +70,11 @@ class Dicom_Viewer {
 
 				break;
 			case 'c':
-				echo do_shortcode( "[gallery size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
+		echo '<p>' . esc_html( $caption ) . '</p>';
+		echo '</div>';
 
 		return ob_get_clean();
 	}
@@ -79,7 +86,7 @@ class Dicom_Viewer {
 			return $style;
 		}
 
-		$style = $this->set_attribute_value($style, 'class', 'is-layout-flex');
+		$style = $this->set_attribute_value( $style, 'class', 'is-layout-flex' );
 		// strip closing </div> tag from the $style string
 		$style = str_replace( '</div>', '', $style );
 
@@ -131,10 +138,11 @@ class Dicom_Viewer {
 	public function dicom_viewer_enqueue_scripts() {
 //	if ( is_singular( 'dicom' ) ) {
 		$plugin_root_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
-		do_action( 'qm/debug', ['$plugin_root_url', $plugin_root_url] );
+		do_action( 'qm/debug', [ '$plugin_root_url', $plugin_root_url ] );
 
-		wp_enqueue_script( 'keyshotxr', qm($plugin_root_url . '/assets/js/KeyShotXR.js'), array(), '1.0', true );
+		wp_enqueue_script( 'keyshotxr', qm( $plugin_root_url . '/assets/js/KeyShotXR.js' ), array(), '1.0', true );
 		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '/assets/js/keyshot_init.js', array(), '1.0', true );
+		wp_enqueue_style( 'dicom-viewer', $plugin_root_url . '/assets/css/dicom-viewer.css', array(), '1.0' );
 
 		$post_id = $this->dicom_id;
 

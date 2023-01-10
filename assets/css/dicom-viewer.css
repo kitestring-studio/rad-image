@@ -1,0 +1,7 @@
+#gallery-1 figcaption {
+	bottom: 0px;
+	position: absolute;
+	color: black;
+	background-color: white;
+	padding: 3px 6px;
+}
