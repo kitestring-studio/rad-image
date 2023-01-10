@@ -1,4 +1,8 @@
-#gallery-1 figcaption {
+.dicom-viewer__wrapper .gallery-item {
+	position: relative;
+}
+
+.dicom-viewer__wrapper .gallery-item figcaption {
 	bottom: 0px;
 	position: absolute;
 	color: black;

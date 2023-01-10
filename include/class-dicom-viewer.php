@@ -70,6 +70,7 @@ class Dicom_Viewer {
 
 				break;
 			case 'c':
+				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
@@ -134,7 +135,9 @@ class Dicom_Viewer {
 		}
 	}
 
-
+	public function dicom_viewer_enqueue_styles() {
+		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), '1.0.0', 'all' );
+	}
 	public function dicom_viewer_enqueue_scripts() {
 //	if ( is_singular( 'dicom' ) ) {
 		$plugin_root_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
@@ -142,7 +145,6 @@ class Dicom_Viewer {
 
 		wp_enqueue_script( 'keyshotxr', qm( $plugin_root_url . '/assets/js/KeyShotXR.js' ), array(), '1.0', true );
 		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '/assets/js/keyshot_init.js', array(), '1.0', true );
-		wp_enqueue_style( 'dicom-viewer', $plugin_root_url . '/assets/css/dicom-viewer.css', array(), '1.0' );
 
 		$post_id = $this->dicom_id;
 
