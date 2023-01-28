@@ -64,7 +64,7 @@ class Dicom_Viewer {
 			case 'a':
 			case 'b':
 				sort( $images );
-				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_scripts' ), 10 );
+				$this->dicom_viewer_enqueue_scripts();
 
 				include plugin_dir_path( __FILE__ ) . 'dicom-template.php';
 
