@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:     DICOM Viewer
+ * Plugin Name:     Radsource Image Viewer
  * Plugin URI:
  * Description:
  * Author:          Kitestring Studio
