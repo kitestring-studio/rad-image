@@ -37,7 +37,7 @@ class Dicom_Viewer {
 		$this->dicom_id = $post_id;
 
 		$type = get_field( 'type', $post_id );
-		if ( ! in_array( $type, array( 'a', 'b', 'c' ) ) ) {
+		if ( ! in_array( $type, array( 'a', 'b', 'c', 'gallery', 'rotation', 'depth' ) ) ) {
 			return '';
 		}
 
@@ -60,16 +60,16 @@ class Dicom_Viewer {
 		$one_image_id      = (int) $images[ $image_count - 1 ];
 		$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
 
-		switch ( $type ) {
-			case 'a':
-			case 'b':
+		switch ( $type ) { // a = depth, b= rotation, c = gallery
+			case 'rotation':
+			case 'depth':
 				sort( $images );
 				$this->dicom_viewer_enqueue_scripts();
 
 				include plugin_dir_path( __FILE__ ) . 'dicom-template.php';
 
 				break;
-			case 'c':
+			case 'gallery':
 				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
@@ -166,11 +166,11 @@ class Dicom_Viewer {
 		$type = get_field( 'type', $post_id );;
 
 		$dynamic_data = array(
-			'vCount'      => ( $type === 'a' ) ? $image_count : 1,
-			'uCount'      => ( $type === 'b' ) ? $image_count : 1,
-			'vStartIndex' => ( $type === 'a' ) ? $image_count - 1 : 0,
-			'uStartIndex' => ( $type === 'b' ) ? $image_count - 1 : 0,
-			'maxZoom'     => ( $type === 'b' ) ? 2 : 1,
+			'vCount'      => ( $type === 'depth' ) ? $image_count : 1,
+			'uCount'      => ( $type === 'rotation' ) ? $image_count : 1,
+			'vStartIndex' => ( $type === 'depth' ) ? $image_count - 1 : 0,
+			'uStartIndex' => ( $type === 'rotation' ) ? $image_count - 1 : 0,
+			'maxZoom'     => ( $type === 'rotation' ) ? 2 : 1,
 			'folderName'  => $image_dir_path_final,
 		);
 		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
