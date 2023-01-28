@@ -37,7 +37,7 @@ class Dicom_Viewer {
 		$this->dicom_id = $post_id;
 
 		$type = get_field( 'type', $post_id );
-		if ( ! in_array( $type, array( 'a', 'b', 'c', 'gallery', 'rotation', 'depth' ) ) ) {
+		if ( ! in_array( $type, array( 'a', 'b', 'c', 'gallery', 'rotation', 'depth', 'rotation-3d' ) ) ) {
 			return '';
 		}
 
@@ -60,7 +60,13 @@ class Dicom_Viewer {
 		$one_image_id      = (int) $images[ $image_count - 1 ];
 		$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
 
+		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
+			case 'rotation-3d':
+//				$y_count = $this->get_y_count( $images );
+//
+//
+//				break;
 			case 'rotation':
 			case 'depth':
 				sort( $images );
@@ -163,13 +169,28 @@ class Dicom_Viewer {
 		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
 
 		// a = depth, b= rotation, c = gallery
-		$type = get_field( 'type', $post_id );;
+		$type = get_field( 'type', $post_id );
+		[$x_count, $y_count] = $this->get_y_count( $image_array );
+
+		if ( $type === 'rotation' ) {
+			$vCount = $x_count;
+			$uCount = $y_count;
+			$vStartIndex = 0;
+			$uStartIndex = $y_count - 1;
+		} elseif ( $type === 'depth' ) {
+			$vCount = $x_count;
+			$uCount = $y_count;
+			$vStartIndex = $x_count - 1;
+			$uStartIndex = 0;
+		} else {
+			return;
+		}
 
 		$dynamic_data = array(
-			'vCount'      => ( $type === 'depth' ) ? $image_count : 1,
-			'uCount'      => ( $type === 'rotation' ) ? $image_count : 1,
-			'vStartIndex' => ( $type === 'depth' ) ? $image_count - 1 : 0,
-			'uStartIndex' => ( $type === 'rotation' ) ? $image_count - 1 : 0,
+			'vCount'      => $vCount,
+			'uCount'      => $uCount,
+			'vStartIndex' => $vStartIndex,
+			'uStartIndex' => $uStartIndex,
 			'maxZoom'     => ( $type === 'rotation' ) ? 2 : 1,
 			'folderName'  => $image_dir_path_final,
 		);
@@ -239,6 +260,33 @@ class Dicom_Viewer {
 		}
 
 		return $sizes;
+	}
+
+	/**
+	 * @param mixed $images
+	 * @param array $twoD
+	 *
+	 * @return array
+	 */
+	protected function get_y_count( mixed $images ): array {
+		$twoD = array();
+		foreach ( $images as $image_id ) {
+			$filename = wp_basename( get_attached_file( $image_id ) );
+			// strip off the extension
+			$filename            = preg_replace( '/\\.[^.\\s]{3,4}$/', '', $filename );
+			$split               = explode( '_', $filename );
+			$twoD[ $split[0] ][] = (int) $image_id;
+		}
+
+		sort( $twoD );
+		$x_count = count( $twoD );
+		// make sure each sub array has the same number of elements
+		$y_count = 0;
+		foreach ( $twoD as $x ) {
+			$y_count = max( $y_count, count( $x ) );
+		}
+
+		return array($x_count, $y_count) ;
 	}
 
 
