@@ -37,36 +37,29 @@ class Dicom_Viewer {
 		$this->dicom_id = $post_id;
 
 		$type = get_field( 'type', $post_id );
-		if ( ! in_array( $type, array( 'a', 'b', 'c', 'gallery', 'rotation', 'depth', 'rotation-3d' ) ) ) {
+		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth', 'rotation-3d' ) ) ) {
 			return '';
 		}
 
-		//get caption field
+		$images = get_field( 'images', $post_id );
+		if ( ! $images ) {
+			return '';
+		}
+
+		$show_title = get_field( 'display_set_title', $post_id );
 		$caption = get_field( 'image_set_caption', $post_id );
 
 		ob_start();
+
 		echo "<div class='dicom-viewer__wrapper'>";
 
-		$show_title = get_field( 'display_set_title', $post_id );
 		if ( $show_title ) {
 			$image_set_title = get_field( 'image_set_title', $post_id );
 			echo '<h2>' . esc_html( $image_set_title ) . '</h2>';
 		}
 
-
-		$images = get_field( 'images', $post_id );
-
-		$image_count       = count( $images );
-		$one_image_id      = (int) $images[ $image_count - 1 ];
-		$placeholder_image = wp_get_attachment_url( $one_image_id, 'full' );
-
 		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
-			case 'rotation-3d':
-//				$y_count = $this->get_y_count( $images );
-//
-//
-//				break;
 			case 'rotation':
 			case 'depth':
 				sort( $images );
@@ -80,9 +73,11 @@ class Dicom_Viewer {
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
-		echo '<p>' . esc_html( $caption ) . '</p>';
-		echo '</div>';
+		if ( $caption ) {
+			echo '<p>' . esc_html( $caption ) . '</p>';
+		}
 
+		echo '</div>';
 		return ob_get_clean();
 	}
 
@@ -155,17 +150,13 @@ class Dicom_Viewer {
 		$post_id = $this->dicom_id;
 
 		$image_array  = get_field( 'images', $post_id );
-		$image_count  = count( $image_array );
-		$one_image_id = (int) $image_array[0];
 
 		// get the image URL
-		$image_url = wp_get_attachment_url( $one_image_id, 'full' );
+		$image_url = wp_get_attachment_url( $image_array[0], 'full' );
 
 
 		// get relative url of the page that requested the image
 		$request_url = wp_make_link_relative( get_permalink() );
-
-
 		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
 
 		// a = depth, b= rotation, c = gallery
