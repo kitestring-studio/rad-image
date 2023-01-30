@@ -20,6 +20,11 @@ class Dicom_Viewer {
 
 		// filter gallery_style with a method named gallery_style_func
 		add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
+
+		// add meta box to the custom post type for copying the shortcode
+		add_action( 'add_meta_boxes', array($this, 'add_dicom_shortcode_meta_box') );
+		add_action('acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts'));
+
 	}
 
 
@@ -280,5 +285,31 @@ class Dicom_Viewer {
 		return array($x_count, $y_count) ;
 	}
 
+	function enqueue_admin_scripts() {
+		wp_enqueue_script( 'dicom-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/dicom-viewer-admin.js', array(), '1.0.0', true );
+	}
 
+
+	function add_dicom_shortcode_meta_box() {
+		add_meta_box(
+			'dicom_shortcode_meta_box',
+			'Shortcode',
+			array( $this, 'dicom_shortcode_meta_box_callback' ),
+			'dicom',
+			'side',
+			'low'
+		);
+	}
+
+	function dicom_shortcode_meta_box_callback( $post ) {
+		$post_id = $post->ID;
+		$shortcode = "[dicom id=$post_id]";
+
+		if ( ! $post_id ) {
+			$shortcode = 'Save post to generate shortcode';
+		}
+
+		echo '<input type="text" id="dicom_shortcode_field" value="'. $shortcode .'" readonly>';
+		echo '<button id="copy_dicom_shortcode" style="border:0px; background-color:transparent;cursor:pointer"><span class="dashicons dashicons-clipboard"></span></button>';
+	}
 }
