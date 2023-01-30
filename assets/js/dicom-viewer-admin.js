@@ -13,4 +13,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	});
 
-})();
+});
+
+// @TODO make this work
+jQuery('input[name="acf[field_63974fe0e18e1]"]').change(function ($input) {
+	console.log('changed')
+	// toggle visibility of the .acf-gallery-sort dropdown. hidden when 'gallery' is selected
+
+})
+
+/*acf.addAction( 'change', function( $input ) {
+	if ( $input.attr('type') === 'radio' && $input.attr('name') === 'type' ) {
+		var selectedValue = $input.val();
+		console.log('changed to ' + selectedValue)
+	}
+});*/

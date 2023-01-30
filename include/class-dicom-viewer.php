@@ -25,6 +25,9 @@ class Dicom_Viewer {
 		add_action( 'add_meta_boxes', array($this, 'add_dicom_shortcode_meta_box') );
 		add_action('acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts'));
 
+		// @TODO add this hook only when needed
+		add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
+
 	}
 
 
@@ -74,7 +77,8 @@ class Dicom_Viewer {
 
 				break;
 			case 'gallery':
-				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
+				qm('gallery');
+//				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
 		}
@@ -142,7 +146,7 @@ class Dicom_Viewer {
 	}
 
 	public function dicom_viewer_enqueue_styles() {
-		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), '1.0.0', 'all' );
+		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), '0.1.3', 'all', true );
 	}
 	public function dicom_viewer_enqueue_scripts() {
 //	if ( is_singular( 'dicom' ) ) {
@@ -264,7 +268,7 @@ class Dicom_Viewer {
 	 *
 	 * @return array
 	 */
-	protected function get_y_count( mixed $images ): array {
+	protected function get_y_count( array $images ): array {
 		$twoD = array();
 		foreach ( $images as $image_id ) {
 			$filename = wp_basename( get_attached_file( $image_id ) );
