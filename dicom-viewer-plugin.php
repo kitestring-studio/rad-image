@@ -7,7 +7,7 @@
  * Author URI:      https://kitestring.studio
  * Text Domain:     dicom-viewer-plugin
  * Domain Path:     /languages
- * Version:         0.1.2
+ * Version:         0.1.3
  *
  * @package         Dicom_Viewer_Plugin
  */
