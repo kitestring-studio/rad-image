@@ -1,4 +1,4 @@
-=== DICOM Viewer KS ===
+=== Image Viewer ===
 Contributors: Gabe462
 Donate link: https://example.com/
 Tags: comments, spam
@@ -13,5 +13,14 @@ Here is a short description of the plugin.  This should be no more than 150 char
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+Implements three types of image viewers for working with sets of images
+- gallery
+- depth scroll
+- image rotation
 
+== Changelog ==
+0.1.4
+* renames plugin to Image viewer, slug to rad-viewer
+* adds support for ACF json files in /data folder
+* stores CPT backup in /data folder
+* dynamically assigns RAD_VERSION to enqueued asset versions

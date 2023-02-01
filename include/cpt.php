@@ -1,18 +1,18 @@
 <?php
-
 function cptui_register_my_cpts_dicom() {
 
 	/**
-	 * Post Type: DICOM Viewer.
+	 * Post Type: Image Viewers.
 	 */
 
 	$labels = [
-		"name" => esc_html__( "DICOM Viewer", "twentytwentythree" ),
-		"singular_name" => esc_html__( "dicom-viewer", "twentytwentythree" ),
+		"name" => esc_html__( "Image Viewers", "rad_image" ),
+		"singular_name" => esc_html__( "Image Viewer", "rad_image" ),
+		"menu_name" => esc_html__( "Image Viewer", "rad_image" ),
 	];
 
 	$args = [
-		"label" => esc_html__( "DICOM Viewer", "twentytwentythree" ),
+		"label" => esc_html__( "Image Viewers", "rad_image" ),
 		"labels" => $labels,
 		"description" => "",
 		"public" => true,
@@ -30,7 +30,7 @@ function cptui_register_my_cpts_dicom() {
 		"capability_type" => "post",
 		"map_meta_cap" => true,
 		"hierarchical" => false,
-		"can_export" => false,
+		"can_export" => true,
 		"rewrite" => [ "slug" => "dicom", "with_front" => true ],
 		"query_var" => true,
 		"menu_icon" => "dashicons-images-alt2",

@@ -2,8 +2,10 @@
 
 class Dicom_Viewer {
 	private string $cpt_slug;
+	private string $version;
 
-	function __construct() {
+	function __construct( $version ) {
+		$this->version = $version;
 		$this->cpt_slug = 'dicom';
 
 		$this->set_hooks();
@@ -146,15 +148,15 @@ class Dicom_Viewer {
 	}
 
 	public function dicom_viewer_enqueue_styles() {
-		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), '0.1.3', 'all', true );
+		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), $this->version, 'all', true );
 	}
 	public function dicom_viewer_enqueue_scripts() {
 //	if ( is_singular( 'dicom' ) ) {
 		$plugin_root_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
 		do_action( 'qm/debug', [ '$plugin_root_url', $plugin_root_url ] );
 
-		wp_enqueue_script( 'keyshotxr', qm( $plugin_root_url . '/assets/js/KeyShotXR.js' ), array(), '1.0', true );
-		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '/assets/js/keyshot_init.js', array(), '1.0', true );
+		wp_enqueue_script( 'keyshotxr', qm( $plugin_root_url . '/assets/js/KeyShotXR.js' ), array(), $this->version, true );
+		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
 
 		$post_id = $this->dicom_id;
 
@@ -290,7 +292,7 @@ class Dicom_Viewer {
 	}
 
 	function enqueue_admin_scripts() {
-		wp_enqueue_script( 'dicom-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/dicom-viewer-admin.js', array(), '1.0.0', true );
+		wp_enqueue_script( 'dicom-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/dicom-viewer-admin.js', array(), $this->version, true );
 	}
 
 
