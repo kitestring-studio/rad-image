@@ -3,8 +3,14 @@
 class Dicom_Viewer {
 	private string $cpt_slug;
 	private string $version;
+	private int $dicom_id;
+	private mixed $lightbox_options_backup;
 
 	function __construct( $version ) {
+		if ( class_exists( 'SimpleLightbox' ) ) {
+			$this->lightbox = SimpleLightbox::get_instance();
+		}
+
 		$this->version = $version;
 		$this->cpt_slug = 'dicom';
 
@@ -16,7 +22,9 @@ class Dicom_Viewer {
 	 * @return void
 	 */
 	protected function set_hooks(): void {
-		add_shortcode( 'dicom', array( $this, 'dicom_shortcode_func' ) );
+		add_shortcode( 'rad_image', array( $this, 'dicom_shortcode_func' ) );
+		add_shortcode( 'dicom', array( $this, 'dicom_shortcode_func' ) ); // deprecated
+
 		add_filter( 'upload_dir', array( $this, 'wp_custom_upload_dir' ) );
 		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'remove_image_sizes' ), 1000 );
 
@@ -47,7 +55,7 @@ class Dicom_Viewer {
 		$this->dicom_id = $post_id;
 
 		$type = get_field( 'type', $post_id );
-		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth', 'rotation-3d' ) ) ) {
+		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth' ) ) ) {
 			return '';
 		}
 
@@ -57,7 +65,7 @@ class Dicom_Viewer {
 		}
 
 		$show_title = get_field( 'display_set_title', $post_id );
-		$caption = get_field( 'image_set_caption', $post_id );
+		$caption    = get_field( 'image_set_caption', $post_id );
 
 		ob_start();
 
@@ -79,9 +87,12 @@ class Dicom_Viewer {
 
 				break;
 			case 'gallery':
-				qm('gallery');
+				qm( 'gallery' );
+				$this->override_lightbox_options();
 //				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
+				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+				$this->restore_lightbox_options();
 				break;
 		}
 		if ( $caption ) {
@@ -89,13 +100,31 @@ class Dicom_Viewer {
 		}
 
 		echo '</div>';
+
 		return ob_get_clean();
+	}
+
+	/**
+	 * This function filters wp_get_attachment_image_attributes to add the caption and description
+	 * to the image data attributes for use by simplelightbox
+	 *
+	 * @param array $attr
+	 * @param WP_Post $attachment
+	 * @param $size
+	 *
+	 * @return array
+	 */
+	function set_attachment_captions( array $attr, WP_Post $attachment, $size ): array {
+		$attr['data-description'] = $attachment->post_content;
+		$attr['data-caption']     = $attachment->post_excerpt;
+
+		return $attr;
 	}
 
 	// filter for gallery_style to add a class to the gallery
 	public function gallery_style_func( $style ) {
 		// check for dicom post type
-		if ( get_post_type( $this->dicom_id ) !== $this->cpt_slug ) {
+		if ( isset( $this->dicom_id ) && get_post_type( $this->dicom_id ) !== $this->cpt_slug ) {
 			return $style;
 		}
 
@@ -317,5 +346,36 @@ class Dicom_Viewer {
 
 		echo '<input type="text" id="dicom_shortcode_field" value="'. $shortcode .'" readonly>';
 		echo '<button id="copy_dicom_shortcode" style="border:0px; background-color:transparent;cursor:pointer"><span class="dashicons dashicons-clipboard"></span></button>';
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function override_lightbox_options(): void {
+		if ( ! $this->lightbox || ! $this->lightbox->options ) {
+			return;
+		}
+
+		$this->backup_lightbox_options();
+
+		$this->lightbox->options['ar_sl_captionSelector'] = 'img';
+		$this->lightbox->options['ar_sl_captionType']     = 'data';
+		$this->lightbox->options['ar_sl_captionData']     = 'description';
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function backup_lightbox_options(): void {
+		$this->lightbox_options_backup = $this->lightbox->options;
+	}
+
+	//restore lightbox options
+	protected function restore_lightbox_options(): void {
+		if ( ! $this->lightbox || ! $this->lightbox->options_backup ) {
+			return;
+		}
+
+		$this->lightbox->options = $this->lightbox_options_backup;
 	}
 }

@@ -7,23 +7,27 @@
  * Author URI:      https://kitestring.studio
  * Text Domain:     rad_image
  * Domain Path:     /languages
- * Version:         0.1.4
+ * Version:         0.1.5
  *
  * @package         Image_Viewer
  */
 
-const RAD_VERSION = '0.1.4';
+const RAD_VERSION = '0.1.5';
 
-// exit if file is called directly
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-//require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
-//require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
-require_once plugin_dir_path( __FILE__ ) . 'include/class-dicom-viewer.php';
+add_action( 'plugins_loaded', function () {
+	if ( ! plugin_dependencies_met() ) {
+		return;
+	}
 
-if( function_exists('acf_add_local_field_group') ){
-	new Dicom_Viewer(RAD_VERSION);
-}
+	//	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/class-dicom-viewer.php';
+
+	new Dicom_Viewer( RAD_VERSION );
+}, 20 );
 
 function qm( string $input) {
 	do_action( 'qm/info', [$input] );
@@ -50,3 +54,39 @@ function rad_acf_json_save_point( $path ) {
 	return plugin_dir_path( __FILE__ ) . 'data';
 
 }
+
+//add_filter( 'simplelightbox_options', 'rad_simplelightbox_options' );
+function rad_simplelightbox_options( $options ) {
+	return $options;
+}
+
+function plugin_dependencies_met() {
+	$required_plugins = array(
+		'advanced-custom-fields-pro/acf.php',
+		'simplelightbox/simplelightbox.php'
+	);
+
+	$missing_plugins = array();
+
+	foreach ( $required_plugins as $plugin ) {
+		if ( ! is_plugin_active( $plugin ) ) {
+			$missing_plugins[] = $plugin;
+		}
+	}
+
+	if ( ! empty( $missing_plugins ) ) {
+		add_action( 'admin_notices', function () use ( $missing_plugins ) {
+			?>
+			<div class="notice notice-error">
+				<p><?php printf( __( 'The following plugins are required for the Image Viewer plugin to work: %s', 'rad_image' ), implode( ', ', $missing_plugins ) ); ?></p>
+			</div>
+			<?php
+		} );
+
+		return false;
+	}
+
+	return true;
+}
+
+
