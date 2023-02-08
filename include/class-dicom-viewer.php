@@ -3,11 +3,14 @@
 class Dicom_Viewer {
 	private string $cpt_slug;
 	private string $version;
+	private string $plugin_url;
 	private int $dicom_id;
 
 	function __construct( $version ) {
 		$this->version = $version;
 		$this->cpt_slug = 'dicom';
+		$this->plugin_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
+
 
 		$this->set_hooks();
 
@@ -31,7 +34,7 @@ class Dicom_Viewer {
 		add_action( 'acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// @TODO add this hook only when needed
-		add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
+//		add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
 	}
 
 
@@ -82,7 +85,8 @@ class Dicom_Viewer {
 				break;
 			case 'gallery':
 				qm( 'gallery' );
-//				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
+//				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_gallery_assets' ), 10 );
+				$this->enqueue_gallery_assets();
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
 				break;
@@ -94,6 +98,65 @@ class Dicom_Viewer {
 		echo '</div>';
 
 		return ob_get_clean();
+	}
+
+	public function enqueue_gallery_assets() {
+		$simplelightbox_dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
+		wp_enqueue_style( 'dicom-viewer', $this->plugin_url . '/assets/css/dicom-viewer.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'simple-lightbox', $simplelightbox_dist . '/simple-lightbox.min.css', array(), $this->version, 'all' );
+
+		wp_enqueue_script( 'simple-lightbox', $simplelightbox_dist . '/simple-lightbox.min.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
+	}
+
+	public function dicom_viewer_enqueue_scripts() {
+//	if ( is_singular( 'dicom' ) ) {
+//		do_action( 'qm/debug', [ '$plugin_root_url', $plugin_root_url ] );
+
+		wp_enqueue_script( 'keyshotxr',$this->plugin_url . '/assets/js/KeyShotXR.js', array(), $this->version, true );
+		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
+
+		$post_id = $this->dicom_id;
+
+		$image_array  = get_field( 'images', $post_id );
+
+
+		// get the image URL
+		$image_url = wp_get_attachment_url( $image_array[0], 'full' );
+
+
+		// get relative url of the page that requested the image
+		$request_url = wp_make_link_relative( get_permalink() );
+		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
+
+		// a = depth, b= rotation, c = gallery
+		$type = get_field( 'type', $post_id );
+		[$x_count, $y_count] = $this->get_y_count( $image_array );
+
+		if ( $type === 'rotation' ) {
+			$vCount = $x_count;
+			$uCount = $y_count;
+			$vStartIndex = 0;
+			$uStartIndex = $y_count - 1;
+		} elseif ( $type === 'depth' ) {
+			$vCount = $x_count;
+			$uCount = $y_count;
+			$vStartIndex = $x_count - 1;
+			$uStartIndex = 0;
+		} else {
+			return;
+		}
+
+		$dynamic_data = array(
+			'vCount'      => $vCount,
+			'uCount'      => $uCount,
+			'vStartIndex' => $vStartIndex,
+			'uStartIndex' => $uStartIndex,
+			'maxZoom'     => ( $type === 'rotation' ) ? 2 : 1,
+			'folderName'  => $image_dir_path_final,
+		);
+		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
+//	}
 	}
 
 	/**
@@ -168,58 +231,6 @@ class Dicom_Viewer {
 		}
 	}
 
-	public function dicom_viewer_enqueue_styles() {
-		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), $this->version, 'all', true );
-	}
-	public function dicom_viewer_enqueue_scripts() {
-//	if ( is_singular( 'dicom' ) ) {
-		$plugin_root_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
-		do_action( 'qm/debug', [ '$plugin_root_url', $plugin_root_url ] );
-
-		wp_enqueue_script( 'keyshotxr', qm( $plugin_root_url . '/assets/js/KeyShotXR.js' ), array(), $this->version, true );
-		wp_enqueue_script( 'keyshot-init', $plugin_root_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
-
-		$post_id = $this->dicom_id;
-
-		$image_array  = get_field( 'images', $post_id );
-
-		// get the image URL
-		$image_url = wp_get_attachment_url( $image_array[0], 'full' );
-
-
-		// get relative url of the page that requested the image
-		$request_url = wp_make_link_relative( get_permalink() );
-		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
-
-		// a = depth, b= rotation, c = gallery
-		$type = get_field( 'type', $post_id );
-		[$x_count, $y_count] = $this->get_y_count( $image_array );
-
-		if ( $type === 'rotation' ) {
-			$vCount = $x_count;
-			$uCount = $y_count;
-			$vStartIndex = 0;
-			$uStartIndex = $y_count - 1;
-		} elseif ( $type === 'depth' ) {
-			$vCount = $x_count;
-			$uCount = $y_count;
-			$vStartIndex = $x_count - 1;
-			$uStartIndex = 0;
-		} else {
-			return;
-		}
-
-		$dynamic_data = array(
-			'vCount'      => $vCount,
-			'uCount'      => $uCount,
-			'vStartIndex' => $vStartIndex,
-			'uStartIndex' => $uStartIndex,
-			'maxZoom'     => ( $type === 'rotation' ) ? 2 : 1,
-			'folderName'  => $image_dir_path_final,
-		);
-		wp_localize_script( 'keyshot-init', 'dicom_viewer_data', $dynamic_data );
-//	}
-	}
 
 
 	/**
