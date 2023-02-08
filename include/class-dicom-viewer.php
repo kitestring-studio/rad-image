@@ -4,13 +4,8 @@ class Dicom_Viewer {
 	private string $cpt_slug;
 	private string $version;
 	private int $dicom_id;
-	private mixed $lightbox_options_backup;
 
 	function __construct( $version ) {
-		if ( class_exists( 'SimpleLightbox' ) ) {
-			$this->lightbox = SimpleLightbox::get_instance();
-		}
-
 		$this->version = $version;
 		$this->cpt_slug = 'dicom';
 
@@ -32,12 +27,11 @@ class Dicom_Viewer {
 		add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 
 		// add meta box to the custom post type for copying the shortcode
-		add_action( 'add_meta_boxes', array($this, 'add_dicom_shortcode_meta_box') );
-		add_action('acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts'));
+		add_action( 'add_meta_boxes', array( $this, 'add_dicom_shortcode_meta_box' ) );
+		add_action( 'acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// @TODO add this hook only when needed
 		add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
-
 	}
 
 
@@ -88,11 +82,9 @@ class Dicom_Viewer {
 				break;
 			case 'gallery':
 				qm( 'gallery' );
-				$this->override_lightbox_options();
 //				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
-				$this->restore_lightbox_options();
 				break;
 		}
 		if ( $caption ) {
@@ -346,36 +338,5 @@ class Dicom_Viewer {
 
 		echo '<input type="text" id="dicom_shortcode_field" value="'. $shortcode .'" readonly>';
 		echo '<button id="copy_dicom_shortcode" style="border:0px; background-color:transparent;cursor:pointer"><span class="dashicons dashicons-clipboard"></span></button>';
-	}
-
-	/**
-	 * @return void
-	 */
-	protected function override_lightbox_options(): void {
-		if ( ! $this->lightbox || ! $this->lightbox->options ) {
-			return;
-		}
-
-		$this->backup_lightbox_options();
-
-		$this->lightbox->options['ar_sl_captionSelector'] = 'img';
-		$this->lightbox->options['ar_sl_captionType']     = 'data';
-		$this->lightbox->options['ar_sl_captionData']     = 'description';
-	}
-
-	/**
-	 * @return void
-	 */
-	protected function backup_lightbox_options(): void {
-		$this->lightbox_options_backup = $this->lightbox->options;
-	}
-
-	//restore lightbox options
-	protected function restore_lightbox_options(): void {
-		if ( ! $this->lightbox || ! $this->lightbox->options_backup ) {
-			return;
-		}
-
-		$this->lightbox->options = $this->lightbox_options_backup;
 	}
 }
