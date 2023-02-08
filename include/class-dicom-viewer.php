@@ -79,9 +79,9 @@ class Dicom_Viewer {
 			case 'depth':
 				sort( $images );
 				$this->dicom_viewer_enqueue_scripts();
-				$image_url = wp_get_attachment_url( $images[0], 'full' );
-				$image_meta = wp_get_attachment_metadata( $images[0], 'full' );
-				$alt = get_post_meta( $images[0], '_wp_attachment_image_alt', true );
+				$image_url = wp_get_attachment_url( end($images), 'full' );
+				$image_meta = wp_get_attachment_metadata( end($images), 'full' );
+				$alt = get_post_meta( end($images), '_wp_attachment_image_alt', true );
 
 				include plugin_dir_path( __FILE__ ) . 'dicom-template.php';
 
@@ -110,11 +110,6 @@ class Dicom_Viewer {
 
 		wp_enqueue_script( 'simple-lightbox', $simplelightbox_dist . '/simple-lightbox.min.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
-
-		// @TODO only dequeue when doing dicom shortcode
-		wp_dequeue_style( 'simplelightbox-css' );
-		wp_dequeue_script( 'simplelightbox' );
-		wp_dequeue_script( 'simplelightbox-call' );
 	}
 
 	public function dicom_viewer_enqueue_scripts() {
