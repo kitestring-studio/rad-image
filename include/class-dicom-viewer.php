@@ -4,7 +4,7 @@ class Dicom_Viewer {
 	private string $cpt_slug;
 	private string $version;
 	private int $dicom_id;
-	private mixed $lightbox_options_backup;
+	private array $lightbox_options_backup;
 
 	function __construct( $version ) {
 		if ( class_exists( 'SimpleLightbox' ) ) {
@@ -36,7 +36,7 @@ class Dicom_Viewer {
 		add_action('acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts'));
 
 		// @TODO add this hook only when needed
-		add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 20 );
 
 	}
 
@@ -88,11 +88,11 @@ class Dicom_Viewer {
 				break;
 			case 'gallery':
 				qm( 'gallery' );
-				$this->override_lightbox_options();
+//				$this->override_lightbox_options();
 //				add_action( 'wp_enqueue_scripts', array( $this, 'dicom_viewer_enqueue_styles' ), 10 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
-				$this->restore_lightbox_options();
+//				$this->restore_lightbox_options();
 				break;
 		}
 		if ( $caption ) {
@@ -177,6 +177,9 @@ class Dicom_Viewer {
 	}
 
 	public function dicom_viewer_enqueue_styles() {
+		wp_dequeue_script('simplelightbox-call');
+		wp_localize_script('simplelightbox-call', 'php_vars', $this->lightbox->options);
+		wp_enqueue_script('simplelightbox-call');
 		wp_enqueue_style( 'dicom-viewer', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/dicom-viewer.css', array(), $this->version, 'all', true );
 	}
 	public function dicom_viewer_enqueue_scripts() {
