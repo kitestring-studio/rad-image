@@ -110,6 +110,11 @@ class Dicom_Viewer {
 
 		wp_enqueue_script( 'simple-lightbox', $simplelightbox_dist . '/simple-lightbox.min.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
+
+		// @TODO only dequeue when doing dicom shortcode
+		wp_dequeue_style( 'simplelightbox-css' );
+		wp_dequeue_script( 'simplelightbox' );
+		wp_dequeue_script( 'simplelightbox-call' );
 	}
 
 	public function dicom_viewer_enqueue_scripts() {
