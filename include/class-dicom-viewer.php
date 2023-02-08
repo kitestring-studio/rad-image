@@ -79,6 +79,9 @@ class Dicom_Viewer {
 			case 'depth':
 				sort( $images );
 				$this->dicom_viewer_enqueue_scripts();
+				$image_url = wp_get_attachment_url( $images[0], 'full' );
+				$image_meta = wp_get_attachment_metadata( $images[0], 'full' );
+				$alt = get_post_meta( $images[0], '_wp_attachment_image_alt', true );
 
 				include plugin_dir_path( __FILE__ ) . 'dicom-template.php';
 
@@ -137,11 +140,11 @@ class Dicom_Viewer {
 			$vCount = $x_count;
 			$uCount = $y_count;
 			$vStartIndex = 0;
-			$uStartIndex = $y_count - 1;
+			$uStartIndex = $y_count - 1; // @TODO should this be 0? Why are we starting from the end?
 		} elseif ( $type === 'depth' ) {
 			$vCount = $x_count;
 			$uCount = $y_count;
-			$vStartIndex = $x_count - 1;
+			$vStartIndex = $x_count - 1; // @TODO should this be 0? Why are we starting from the end?
 			$uStartIndex = 0;
 		} else {
 			return;

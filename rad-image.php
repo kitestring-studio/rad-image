@@ -63,7 +63,7 @@ function rad_simplelightbox_options( $options ) {
 function plugin_dependencies_met() {
 	$required_plugins = array(
 		'advanced-custom-fields-pro/acf.php',
-		'simplelightbox/simplelightbox.php'
+//		'simplelightbox/simplelightbox.php'
 	);
 
 	$missing_plugins = array();
