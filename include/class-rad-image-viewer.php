@@ -5,6 +5,8 @@ class RAD_Image_Viewer {
 	private string $version;
 	private string $plugin_url;
 	private int $rs_image_id;
+	private int $max_width;
+	private int|float $placeholder_height;
 
 	function __construct( $version ) {
 		$this->version = $version;
@@ -39,11 +41,11 @@ class RAD_Image_Viewer {
 
 	public function rad_image_shortcode_func( $atts ) {
 		$atts = shortcode_atts(
-			array( 'id' => '' ),
+			array( 'id' => '', 'max-width'=> '600' ),
 			$atts,
 			'custom_post_type'
 		);
-
+		$this->max_width = intval( $atts['max-width'] );
 		$post_id = (int) $atts['id'];
 		if ( get_post_type( $post_id ) !== $this->cpt_slug ) {
 			return '';
@@ -123,8 +125,7 @@ class RAD_Image_Viewer {
 		$image_url       = wp_get_attachment_url( $image_array[0], 'full' );
 		$image_meta      = wp_get_attachment_metadata( $image_array[0], 'full' );
 		$aspect_ratio    = $image_meta['height'] / $image_meta['width'];
-		$image_max_width = 617;
-		$this->placeholder_height          = $image_max_width * $aspect_ratio;
+		$this->placeholder_height          = $this->max_width * $aspect_ratio;
 
 		// get relative url of the page that requested the image
 		$request_url          = wp_make_link_relative( get_permalink() );
@@ -155,7 +156,7 @@ class RAD_Image_Viewer {
 			'uStartIndex'    => $uStartIndex,
 			'maxZoom'        => ( $type === 'rotation' ) ? 2 : 1,
 			'folderName'     => $image_dir_path_final,
-			'viewPortWidth'  => $image_max_width, //$image_meta['width'],
+			'viewPortWidth'  => $this->max_width, //$image_meta['width'],
 			'viewPortHeight' => $this->placeholder_height //$image_meta['height'],
 		);
 		wp_localize_script( 'keyshot-init', 'rad_keyshot_config', $dynamic_data );
