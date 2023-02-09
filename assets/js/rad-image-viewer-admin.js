@@ -31,11 +31,18 @@ function handleTypeChange(input) {
 	// toggle visibility of the .acf-gallery-sort dropdown. hidden when 'gallery' is selected
 	if (type === 'gallery') {
 		jQuery('.acf-gallery-sort').fadeIn()
+		// hide image title field
+		// hide image title field
+		// jQuery('.acf-field-text').hide()
 	} else {
 		jQuery('.acf-gallery-sort').fadeOut()
+		// hide image title field
+		// hide image caption field
+		// hide image description field
 	}
 }
 
+// @TODO use this native ACF hook instead?
 /*acf.addAction( 'change', function( $input ) {
 	console.log('changed')
 	if ( $input.attr('type') === 'radio' && $input.attr('name') === 'type' ) {
