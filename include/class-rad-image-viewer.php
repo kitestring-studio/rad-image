@@ -6,7 +6,7 @@ class RAD_Image_Viewer {
 	private string $plugin_url;
 	private int $rs_image_id;
 	private int $max_width;
-	private int|float $placeholder_height;
+	private int $placeholder_height;
 
 	function __construct( $version ) {
 		$this->version = $version;
@@ -41,11 +41,11 @@ class RAD_Image_Viewer {
 
 	public function rad_image_shortcode_func( $atts ) {
 		$atts = shortcode_atts(
-			array( 'id' => '', 'max-width'=> '600' ),
+			array( 'id' => '', 'max_width'=> '617' ),
 			$atts,
 			'custom_post_type'
 		);
-		$this->max_width = intval( $atts['max-width'] );
+		$this->max_width = (int) $atts['max-width'];
 		$post_id = (int) $atts['id'];
 		if ( get_post_type( $post_id ) !== $this->cpt_slug ) {
 			return '';
@@ -122,10 +122,10 @@ class RAD_Image_Viewer {
 		$post_id     = $this->rs_image_id;
 		$image_array = get_field( 'images', $post_id );
 
-		$image_url       = wp_get_attachment_url( $image_array[0], 'full' );
-		$image_meta      = wp_get_attachment_metadata( $image_array[0], 'full' );
-		$aspect_ratio    = $image_meta['height'] / $image_meta['width'];
-		$this->placeholder_height          = $this->max_width * $aspect_ratio;
+		$image_url                = wp_get_attachment_url( $image_array[0], 'full' );
+		$image_meta               = wp_get_attachment_metadata( $image_array[0], 'full' );
+		$aspect_ratio             = $image_meta['height'] / $image_meta['width'];
+		$this->placeholder_height = $this->max_width * $aspect_ratio;
 
 		// get relative url of the page that requested the image
 		$request_url          = wp_make_link_relative( get_permalink() );
