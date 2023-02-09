@@ -1,6 +1,6 @@
 {
-  "dicom": {
-    "name": "dicom",
+  "rad_image": {
+    "name": "rad_image",
     "label": "Image Viewers",
     "singular_label": "Image Viewer",
     "description": "",
@@ -30,8 +30,7 @@
     "menu_icon": "dashicons-images-alt2",
     "register_meta_box_cb": null,
     "supports": [
-      "title",
-      "thumbnail"
+      "title"
     ],
     "taxonomies": [],
     "labels": {

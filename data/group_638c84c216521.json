@@ -1,6 +1,6 @@
 {
     "key": "group_638c84c216521",
-    "title": "DICOM",
+    "title": "RAD Image Viewer",
     "fields": [
         {
             "key": "field_63974fe0e18e1",
@@ -129,7 +129,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "dicom"
+                "value": "rad_image"
             }
         ]
     ],
@@ -142,5 +142,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1675253109
+    "modified": 1675944903
 }

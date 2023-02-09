@@ -1,23 +1,23 @@
 var keyshotXR;
 
 function initKeyShotXR() {
-	console.log(dicom_viewer_data)
+	console.log(rad_keyshot_config)
 	var nameOfDiv = "KeyShotXR";
 	// var folderName = "../../wp-content/uploads/2022/12"; //will need to calculate the number of parent folders in the path
-	var folderName = dicom_viewer_data.folderName;
+	var folderName = rad_keyshot_config.folderName;
 	var viewPortWidth = 617;
 	var viewPortHeight = 617;
 	var backgroundColor = "#FFFFFF";
 	// var uCount = 40; // get count from items uploaded to gallery field
-	var uCount = parseInt(dicom_viewer_data.uCount);
-	var vCount = parseInt(dicom_viewer_data.vCount);
+	var uCount = parseInt(rad_keyshot_config.uCount);
+	var vCount = parseInt(rad_keyshot_config.vCount);
 	var uWrap = false;
 	var vWrap = false;
 	var uMouseSensitivity = -0.05;
 	var vMouseSensitivity = 0.05;
 	// var uStartIndex = 39;// Will the starting frame always be the largest file number?
-	var uStartIndex = parseInt(dicom_viewer_data.uStartIndex);
-	var vStartIndex = parseInt(dicom_viewer_data.vStartIndex);
+	var uStartIndex = parseInt(rad_keyshot_config.uStartIndex);
+	var vStartIndex = parseInt(rad_keyshot_config.vStartIndex);
 	var minZoom = 1;
 	var maxZoom = 2; //disable for depth zoom
 	var rotationDamping = 0.8;

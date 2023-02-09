@@ -22,11 +22,11 @@ add_action( 'plugins_loaded', function () {
 	}
 
 	//	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
-	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
-	require_once plugin_dir_path( __FILE__ ) . 'include/class-dicom-viewer.php';
+//	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
+//	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/class-RAD-Image-viewer.php';
 
-	new Dicom_Viewer( RAD_VERSION );
+	new RAD_Image_Viewer( RAD_VERSION );
 }, 20 );
 
 function qm( string $input) {

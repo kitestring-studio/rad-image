@@ -1,8 +1,8 @@
-.dicom-viewer__wrapper .gallery-item {
+.rad-image__wrapper .gallery-item {
 	position: relative;
 }
 
-.dicom-viewer__wrapper .gallery-item figcaption {
+.rad-image__wrapper .gallery-item figcaption {
 	bottom: 0px;
 	position: absolute;
 	color: black;

@@ -3,7 +3,7 @@
 	<img style="" id="placeholder" src="<?php echo $image_url; ?>" alt="<?php echo $alt;?>">
 </div>
 <style>
-	.dicom-viewer__wrapper #KeyShotXR img {
+	.rad-image__wrapper #KeyShotXR img {
 		max-width: 100%;
 		height:617px;
 	}
