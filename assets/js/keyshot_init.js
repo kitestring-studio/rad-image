@@ -5,8 +5,8 @@ function initKeyShotXR() {
 	var nameOfDiv = "KeyShotXR";
 	// var folderName = "../../wp-content/uploads/2022/12"; //will need to calculate the number of parent folders in the path
 	var folderName = rad_keyshot_config.folderName;
-	var viewPortWidth = 617;
-	var viewPortHeight = 617;
+	var viewPortWidth = rad_keyshot_config.viewPortWidth;
+	var viewPortHeight = rad_keyshot_config.viewPortHeight;
 	var backgroundColor = "#FFFFFF";
 	// var uCount = 40; // get count from items uploaded to gallery field
 	var uCount = parseInt(rad_keyshot_config.uCount);

@@ -117,31 +117,31 @@ class RAD_Image_Viewer {
 		wp_enqueue_script( 'keyshotxr',$this->plugin_url . '/assets/js/KeyShotXR.js', array(), $this->version, true );
 		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
 
-		$post_id = $this->rs_image_id;
+		$post_id     = $this->rs_image_id;
+		$image_array = get_field( 'images', $post_id );
 
-		$image_array  = get_field( 'images', $post_id );
-
-
-		// get the image URL
-		$image_url = wp_get_attachment_url( $image_array[0], 'full' );
-
+		$image_url       = wp_get_attachment_url( $image_array[0], 'full' );
+		$image_meta      = wp_get_attachment_metadata( $image_array[0], 'full' );
+		$aspect_ratio    = $image_meta['height'] / $image_meta['width'];
+		$image_max_width = 617;
+		$this->placeholder_height          = $image_max_width * $aspect_ratio;
 
 		// get relative url of the page that requested the image
-		$request_url = wp_make_link_relative( get_permalink() );
+		$request_url          = wp_make_link_relative( get_permalink() );
 		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
 
 		// a = depth, b= rotation, c = gallery
 		$type = get_field( 'type', $post_id );
-		[$x_count, $y_count] = $this->get_y_count( $image_array );
+		[ $x_count, $y_count ] = $this->get_y_count( $image_array );
 
 		if ( $type === 'rotation' ) {
-			$vCount = $x_count;
-			$uCount = $y_count;
+			$vCount      = $x_count;
+			$uCount      = $y_count;
 			$vStartIndex = 0;
 			$uStartIndex = $y_count - 1; // @TODO should this be 0? Why are we starting from the end?
 		} elseif ( $type === 'depth' ) {
-			$vCount = $x_count;
-			$uCount = $y_count;
+			$vCount      = $x_count;
+			$uCount      = $y_count;
 			$vStartIndex = $x_count - 1; // @TODO should this be 0? Why are we starting from the end?
 			$uStartIndex = 0;
 		} else {
@@ -149,12 +149,14 @@ class RAD_Image_Viewer {
 		}
 
 		$dynamic_data = array(
-			'vCount'      => $vCount,
-			'uCount'      => $uCount,
-			'vStartIndex' => $vStartIndex,
-			'uStartIndex' => $uStartIndex,
-			'maxZoom'     => ( $type === 'rotation' ) ? 2 : 1,
-			'folderName'  => $image_dir_path_final,
+			'vCount'         => $vCount,
+			'uCount'         => $uCount,
+			'vStartIndex'    => $vStartIndex,
+			'uStartIndex'    => $uStartIndex,
+			'maxZoom'        => ( $type === 'rotation' ) ? 2 : 1,
+			'folderName'     => $image_dir_path_final,
+			'viewPortWidth'  => $image_max_width, //$image_meta['width'],
+			'viewPortHeight' => $this->placeholder_height //$image_meta['height'],
 		);
 		wp_localize_script( 'keyshot-init', 'rad_keyshot_config', $dynamic_data );
 	}
