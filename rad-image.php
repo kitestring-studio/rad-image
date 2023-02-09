@@ -7,12 +7,12 @@
  * Author URI:      https://kitestring.studio
  * Text Domain:     rad_image
  * Domain Path:     /languages
- * Version:         0.1.5
+ * Version:         0.1.6
  *
  * @package         Image_Viewer
  */
 
-const RAD_VERSION = '0.1.5';
+const RAD_VERSION = '0.1.6';
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -22,9 +22,9 @@ add_action( 'plugins_loaded', function () {
 	}
 
 	//	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-//	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
-//	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
-	require_once plugin_dir_path( __FILE__ ) . 'include/class-RAD-Image-viewer.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/class-rad-image-viewer.php';
 
 	new RAD_Image_Viewer( RAD_VERSION );
 }, 20 );

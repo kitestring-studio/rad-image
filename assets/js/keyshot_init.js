@@ -26,7 +26,7 @@ function initKeyShotXR() {
 	var downloadOnInteraction = false;
 	var imageExtension = "jpg";
 	var showLoading = true;
-	var loadingIcon = "../../../../../plugins/dicom-viewer-plugin/assets/img/Ball_and_arrow.webp"; // will need to calculate the number of parent levels in the path
+	var loadingIcon = "../../../../../plugins/rad-image/assets/img/Ball_and_arrow.webp"; // will need to calculate the number of parent levels in the path
 	var allowFullscreen = true; // Double-click in desktop browsers for fullscreen.
 	var uReverse = false;
 	var vReverse = false;

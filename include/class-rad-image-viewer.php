@@ -11,7 +11,6 @@ class RAD_Image_Viewer {
 		$this->cpt_slug = 'rad_image';
 		$this->plugin_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
 
-
 		$this->set_hooks();
 
 	}

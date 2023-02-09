@@ -19,6 +19,10 @@ Implements three types of image viewers for working with sets of images
 - image rotation
 
 == Changelog ==
+0.1.6
+* changes all instances of dicom to rad_image
+* implement simple-lightbox npm package
+
 0.1.4
 * renames plugin to Image viewer, slug to rad-viewer
 * adds support for ACF json files in /data folder
