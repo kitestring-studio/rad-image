@@ -55,10 +55,6 @@ function rad_acf_json_save_point( $path ) {
 
 }
 
-//add_filter( 'simplelightbox_options', 'rad_simplelightbox_options' );
-function rad_simplelightbox_options( $options ) {
-	return $options;
-}
 
 function plugin_dependencies_met() {
 	$required_plugins = array(
