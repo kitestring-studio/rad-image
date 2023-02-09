@@ -30,11 +30,13 @@ function handleTypeChange(input) {
 
 	// toggle visibility of the .acf-gallery-sort dropdown. hidden when 'gallery' is selected
 	if (type === 'gallery') {
+		// jQuery('body').addClass('rad-image-gallery'); // @TODO set body class for hiding gallery fields
 		jQuery('.acf-gallery-sort').fadeIn()
 		// hide image title field
 		// hide image title field
 		// jQuery('.acf-field-text').hide()
 	} else {
+		// jQuery('body').addClass('rad-image-' + type); // @TODO set body class for hiding gallery fields
 		jQuery('.acf-gallery-sort').fadeOut()
 		// hide image title field
 		// hide image caption field
