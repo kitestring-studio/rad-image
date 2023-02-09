@@ -13,16 +13,31 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	});
 
+	handleTypeChange(jQuery('input[name="acf[field_63974fe0e18e1]"]:checked'))
+	jQuery('input[name="acf[field_63974fe0e18e1]"]').change(function (e) {
+		handleTypeChange(e.target);
+	})
+
 });
 
-// @TODO make this work
-jQuery('input[name="acf[field_63974fe0e18e1]"]').change(function ($input) {
-	console.log('changed')
-	// toggle visibility of the .acf-gallery-sort dropdown. hidden when 'gallery' is selected
 
-})
+function handleTypeChange(input) {
+	"use strict";
+
+	// console.log('changed')
+	let type = jQuery(input).attr('value');
+	// console.log(type)
+
+	// toggle visibility of the .acf-gallery-sort dropdown. hidden when 'gallery' is selected
+	if (type === 'gallery') {
+		jQuery('.acf-gallery-sort').fadeIn()
+	} else {
+		jQuery('.acf-gallery-sort').fadeOut()
+	}
+}
 
 /*acf.addAction( 'change', function( $input ) {
+	console.log('changed')
 	if ( $input.attr('type') === 'radio' && $input.attr('name') === 'type' ) {
 		var selectedValue = $input.val();
 		console.log('changed to ' + selectedValue)
