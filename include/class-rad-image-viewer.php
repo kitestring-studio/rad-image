@@ -45,7 +45,7 @@ class RAD_Image_Viewer {
 			$atts,
 			'custom_post_type'
 		);
-		$this->max_width = (int) $atts['max-width'];
+		$this->max_width = (int) $atts['max_width'];
 		$post_id = (int) $atts['id'];
 		if ( get_post_type( $post_id ) !== $this->cpt_slug ) {
 			return '';
