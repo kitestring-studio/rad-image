@@ -1,3 +1,7 @@
+.rad-image__wrapper > .gallery {
+	margin-bottom:2rem;
+}
+
 .rad-image__wrapper .gallery-item {
 	position: relative;
 }
