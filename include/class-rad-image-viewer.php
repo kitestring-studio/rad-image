@@ -65,14 +65,26 @@ class RAD_Image_Viewer {
 		$show_title = get_field( 'display_set_title', $post_id );
 		$caption    = get_field( 'image_set_caption', $post_id );
 
+		$tooltip = array(
+			'gallery' => 'Click on any image thumbnail to access the full image and see image-specific details',
+		);
+
 		ob_start();
 
 		echo "<div class='rad-image__wrapper'>";
 
+		?><div class="tooltip-wrapper"><?php
 		if ( $show_title ) {
 			$image_set_title = get_field( 'image_set_title', $post_id );
 			echo '<h2>' . esc_html( $image_set_title ) . '</h2>';
 		}
+
+		?>
+		<div class="tooltip"><span class="dashicons dashicons-editor-help"></span>
+			<span class="tooltiptext tooltip-left"><?php echo $tooltip[$type]; ?></span>
+		</div>
+		</div>
+		<?php
 
 		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
