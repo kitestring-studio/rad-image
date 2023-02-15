@@ -6,6 +6,10 @@
 	position: relative;
 }
 
+.rad-image__wrapper .gallery-item .gallery-caption {
+	width: initial;
+}
+
 .rad-image__wrapper .gallery-item figcaption {
 	bottom: 0px;
 	position: absolute;
@@ -13,13 +17,17 @@
 	background-color: white;
 	padding: 3px 6px;
 }
-/*div.ltblue-bkd.interiorhero {display:none !important} !* For testing *!*/
+
+div.ltblue-bkd.interiorhero {
+	/*display: none !important; !* For testing *!*/
+}
 
 .tooltip-wrapper {
 	display: flex;
 	/*justify-content: flex-start;*/
 	justify-content: space-between;
 	gap: 10px;
+	margin-bottom: 5px;
 }
 
 .tooltip-wrapper h2 {

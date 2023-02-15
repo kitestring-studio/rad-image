@@ -27,7 +27,6 @@ class RAD_Image_Viewer {
 		add_filter( 'upload_dir', array( $this, 'wp_custom_upload_dir' ) );
 		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'remove_image_sizes' ), 1000 );
 
-
 		// add meta box to the custom post type for copying the shortcode
 		add_action( 'add_meta_boxes', array( $this, 'add_shortcode_meta_box' ) );
 		add_action( 'acf/input/admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
@@ -39,7 +38,7 @@ class RAD_Image_Viewer {
 
 	public function rad_image_shortcode_func( $atts ) {
 		$atts = shortcode_atts(
-			array( 'id' => '', 'max_width'=> '617' ),
+			array( 'id' => '', 'max_width'=> '750' ),
 			$atts,
 			'custom_post_type'
 		);
@@ -123,7 +122,8 @@ class RAD_Image_Viewer {
 
 	protected function title_and_tooltip( $post_id, $show_title, $type, $tooltip ) {
 		?>
-		<div class="tooltip-wrapper"><div class="title_container"><?php
+		<div class="tooltip-wrapper">
+			<div class="title_container"><?php
 				if ( $show_title ) {
 					$image_set_title = get_field( 'image_set_title', $post_id );
 					echo '<h2>' . esc_html( $image_set_title ) . '</h2>';
@@ -131,7 +131,7 @@ class RAD_Image_Viewer {
 
 				?></div>
 			<div class="tooltip"><span class="dashicons dashicons-editor-help"></span>
-				<span class="tooltiptext tooltip-left"><?php echo $tooltip[$type]; ?></span>
+				<span class="tooltiptext tooltip-left"><?php echo $tooltip[ $type ]; ?></span>
 			</div>
 		</div>
 		<?php
@@ -147,9 +147,7 @@ class RAD_Image_Viewer {
 	}
 
 	public function viewer_enqueue_scripts() {
-//		do_action( 'qm/debug', [ '$plugin_root_url', $plugin_root_url ] );
-
-		wp_enqueue_script( 'keyshotxr',$this->plugin_url . '/assets/js/KeyShotXR.js', array(), $this->version, true );
+		wp_enqueue_script( 'keyshotxr', $this->plugin_url . '/assets/js/KeyShotXR.js', array(), $this->version, true );
 		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
 
 		$post_id     = $this->rs_image_id;
@@ -157,8 +155,8 @@ class RAD_Image_Viewer {
 
 		$image_url                = wp_get_attachment_url( $image_array[0], 'full' );
 		$image_meta               = wp_get_attachment_metadata( $image_array[0], 'full' );
-		$aspect_ratio             = $image_meta['height'] / $image_meta['width'];
-		$this->placeholder_height = $this->max_width * $aspect_ratio;
+		$this->aspect_ratio       = floatval( $image_meta['height'] / $image_meta['width'] );
+		$this->placeholder_height = $this->max_width * $this->aspect_ratio;
 
 		// get relative url of the page that requested the image
 		$request_url          = wp_make_link_relative( get_permalink() );
@@ -183,14 +181,14 @@ class RAD_Image_Viewer {
 		}
 
 		$dynamic_data = array(
-			'vCount'         => $vCount,
-			'uCount'         => $uCount,
-			'vStartIndex'    => $vStartIndex,
-			'uStartIndex'    => $uStartIndex,
-			'maxZoom'        => ( $type === 'rotation' ) ? 2 : 1,
-			'folderName'     => $image_dir_path_final,
-			'viewPortWidth'  => $this->max_width, //$image_meta['width'],
-			'viewPortHeight' => $this->placeholder_height //$image_meta['height'],
+			'vCount'      => $vCount,
+			'uCount'      => $uCount,
+			'vStartIndex' => $vStartIndex,
+			'uStartIndex' => $uStartIndex,
+			'maxZoom'     => ( $type === 'rotation' ) ? 2 : 1,
+			'folderName'  => $image_dir_path_final,
+			'imageWidth'  => $image_meta['width'], // no longer used
+			'imageHeight' => $image_meta['height'], // no longer used
 		);
 		wp_localize_script( 'keyshot-init', 'rad_keyshot_config', $dynamic_data );
 	}
