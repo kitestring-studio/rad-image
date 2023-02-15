@@ -27,8 +27,6 @@ class RAD_Image_Viewer {
 		add_filter( 'upload_dir', array( $this, 'wp_custom_upload_dir' ) );
 		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'remove_image_sizes' ), 1000 );
 
-		// filter gallery_style with a method named gallery_style_func
-		add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 
 		// add meta box to the custom post type for copying the shortcode
 		add_action( 'add_meta_boxes', array( $this, 'add_shortcode_meta_box' ) );
@@ -86,18 +84,32 @@ class RAD_Image_Viewer {
 
 
 				sort( $images );
-				$image_url = wp_get_attachment_url( end($images), 'full' );
-				$image_meta = wp_get_attachment_metadata( end($images), 'full' );
-				$alt = get_post_meta( end($images), '_wp_attachment_image_alt', true );
+				$image_url  = wp_get_attachment_url( end( $images ), 'full' );
+				$image_meta = wp_get_attachment_metadata( end( $images ), 'full' );
+				$alt        = get_post_meta( end( $images ), '_wp_attachment_image_alt', true );
 
 				include plugin_dir_path( __FILE__ ) . 'keyshot-template.php';
 
 				break;
 			case 'gallery':
-//				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_gallery_assets' ), 10 );
+				$fixsupport = false;
+				if ( ! current_theme_supports( 'html5', array( 'gallery' ) ) ) {
+					add_theme_support( 'html5', array( 'gallery' ) ); //caption too?
+					$fixsupport = true;
+				}
+
+				//				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_gallery_assets' ), 10 );
 				$this->enqueue_gallery_assets();
+
+				add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
+
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+
+
+				if ( $fixsupport ) {
+					remove_theme_support( 'html5' );
+				}
 				break;
 		}
 		if ( $caption ) {
