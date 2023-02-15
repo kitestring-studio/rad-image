@@ -75,18 +75,7 @@ class RAD_Image_Viewer {
 
 		echo "<div class='rad-image__wrapper'>";
 
-		?><div class="tooltip-wrapper"><div class="title_container"><?php
-		if ( $show_title ) {
-			$image_set_title = get_field( 'image_set_title', $post_id );
-			echo '<h2>' . esc_html( $image_set_title ) . '</h2>';
-		}
-
-		?></div>
-		<div class="tooltip"><span class="dashicons dashicons-editor-help"></span>
-			<span class="tooltiptext tooltip-left"><?php echo $tooltip[$type]; ?></span>
-		</div>
-		</div>
-		<?php
+		$this->title_and_tooltip($post_id, $show_title, $type, $tooltip);
 
 		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
@@ -96,7 +85,7 @@ class RAD_Image_Viewer {
 				wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array(), $this->version, 'all' );
 
 
-			sort( $images );
+				sort( $images );
 				$image_url = wp_get_attachment_url( end($images), 'full' );
 				$image_meta = wp_get_attachment_metadata( end($images), 'full' );
 				$alt = get_post_meta( end($images), '_wp_attachment_image_alt', true );
@@ -105,7 +94,6 @@ class RAD_Image_Viewer {
 
 				break;
 			case 'gallery':
-				qm( 'gallery' );
 //				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_gallery_assets' ), 10 );
 				$this->enqueue_gallery_assets();
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
@@ -116,9 +104,25 @@ class RAD_Image_Viewer {
 			echo '<p>' . esc_html( $caption ) . '</p>';
 		}
 
-		echo '</div>';
+		echo '</div>'; // end rad-image__wrapper
 
 		return ob_get_clean();
+	}
+
+	protected function title_and_tooltip( $post_id, $show_title, $type, $tooltip ) {
+		?>
+		<div class="tooltip-wrapper"><div class="title_container"><?php
+				if ( $show_title ) {
+					$image_set_title = get_field( 'image_set_title', $post_id );
+					echo '<h2>' . esc_html( $image_set_title ) . '</h2>';
+				}
+
+				?></div>
+			<div class="tooltip"><span class="dashicons dashicons-editor-help"></span>
+				<span class="tooltiptext tooltip-left"><?php echo $tooltip[$type]; ?></span>
+			</div>
+		</div>
+		<?php
 	}
 
 	public function enqueue_gallery_assets() {
