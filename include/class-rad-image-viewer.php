@@ -67,19 +67,21 @@ class RAD_Image_Viewer {
 
 		$tooltip = array(
 			'gallery' => 'Click on any image thumbnail to access the full image and see image-specific details',
+			'rotation' => 'This viewer allows you to rotate the image around a vertical or horizontal axis. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: click and drag your cursor along the desired axis of rotation. Depending on the image, rotation may only be available around one axis. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.',
+			'depth' => 'This viewer emulates a DICOM-style image format. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: to increase or decrease the depth of your view, click or touch and drag your cursor up and down vertically. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.',
 		);
 
 		ob_start();
 
 		echo "<div class='rad-image__wrapper'>";
 
-		?><div class="tooltip-wrapper"><?php
+		?><div class="tooltip-wrapper"><div class="title_container"><?php
 		if ( $show_title ) {
 			$image_set_title = get_field( 'image_set_title', $post_id );
 			echo '<h2>' . esc_html( $image_set_title ) . '</h2>';
 		}
 
-		?>
+		?></div>
 		<div class="tooltip"><span class="dashicons dashicons-editor-help"></span>
 			<span class="tooltiptext tooltip-left"><?php echo $tooltip[$type]; ?></span>
 		</div>
@@ -90,8 +92,11 @@ class RAD_Image_Viewer {
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
 			case 'rotation':
 			case 'depth':
-				sort( $images );
 				$this->viewer_enqueue_scripts();
+				wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array(), $this->version, 'all' );
+
+
+			sort( $images );
 				$image_url = wp_get_attachment_url( end($images), 'full' );
 				$image_meta = wp_get_attachment_metadata( end($images), 'full' );
 				$alt = get_post_meta( end($images), '_wp_attachment_image_alt', true );
