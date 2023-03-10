@@ -79,7 +79,7 @@ class RAD_Image_Viewer {
 			case 'rotation':
 			case 'depth':
 				$this->viewer_enqueue_scripts();
-				wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array(), $this->version, 'all' );
+				wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array('dashicons'), $this->version, 'all' );
 
 
 				sort( $images );

@@ -23,6 +23,29 @@ div.ltblue-bkd.interiorhero {
 	/*display: none !important; !* For testing *!*/
 }
 
+.gallery-item {
+	flex-grow: 1;
+	/*flex-shrink: 1;*/
+	/*flex-basis: auto;*/
+}
+
+@media (max-width: 425px) {
+	.gallery-item img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+@media (min-width: 426px) {
+	.gallery-item img {
+		width: 100%;
+		/*height: 100%;  !*This is where aspect ration needs to be defined & constrained *!*/
+		aspect-ratio: 1/1;
+		/*object-fit: cover;*/
+	}
+}
+
 .tooltip-wrapper {
 	display: flex;
 	/*justify-content: flex-start;*/
