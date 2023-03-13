@@ -7,6 +7,17 @@
 	position: relative;
 }
 
+.rad-image__wrapper .gallery-item img {
+	/*aspect-ratio: 1/1;*/
+}
+
+@media (max-width: 425px) {
+	.rad-image__wrapper .gallery-item img {
+		width: 100%;
+		height: 100%;
+	}
+}
+
 .rad-image__wrapper .gallery-item .gallery-caption {
 	width: initial;
 }
@@ -23,16 +34,6 @@ div.ltblue-bkd.interiorhero {
 	/*display: none !important; !* For testing *!*/
 }
 
-.gallery-item img {
-	/*aspect-ratio: 1/1;*/
-}
-
-@media (max-width: 425px) {
-	.gallery-item img {
-		width: 100%;
-		height: 100%;
-	}
-}
 
 .tooltip-wrapper {
 	display: flex;
