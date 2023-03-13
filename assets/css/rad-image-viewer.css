@@ -133,7 +133,7 @@ div.ltblue-bkd.interiorhero {
 	top: -25px;
 	bottom: auto;
 	right: 128%;
-	width: 400px !important;
+	width: 400px;
 }
 
 /*.tooltip-left::after {
