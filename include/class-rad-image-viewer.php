@@ -82,8 +82,7 @@ class RAD_Image_Viewer {
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
 			case 'rotation':
 			case 'depth':
-				$this->viewer_enqueue_scripts();
-				wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
+				$this->enqueue_viewer_assets();
 
 				sort( $images );
 				$image_url  = wp_get_attachment_url( end( $images ), 'full' );
@@ -95,19 +94,18 @@ class RAD_Image_Viewer {
 				break;
 			case 'gallery':
 				$fixsupport = false;
+
 				if ( ! current_theme_supports( 'html5', array( 'gallery' ) ) ) {
 					add_theme_support( 'html5', array( 'gallery' ) ); //caption too?
 					$fixsupport = true;
 				}
 
-				//				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_gallery_assets' ), 10 );
 				$this->enqueue_gallery_assets();
 
 				add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 
 				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
-
 
 				if ( $fixsupport ) {
 					remove_theme_support( 'html5' );
@@ -149,7 +147,9 @@ class RAD_Image_Viewer {
 		wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
 	}
 
-	public function viewer_enqueue_scripts() {
+	public function enqueue_viewer_assets() {
+		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
+
 		wp_enqueue_script( 'keyshotxr', $this->plugin_url . '/assets/js/KeyShotXR.js', array(), $this->version, true );
 		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
 
@@ -247,7 +247,6 @@ class RAD_Image_Viewer {
 
 		// split the $request url into an array, and remove empty elements
 		$request_url_array = array_filter( explode( '/', $request_url ) );
-
 
 		// delete empty array elements, and then create a backtrack string for $image_dir_path
 
