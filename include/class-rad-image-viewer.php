@@ -139,7 +139,7 @@ class RAD_Image_Viewer {
 
 	public function enqueue_gallery_assets() {
 		$simplelightbox_dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
-		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array('dashicons'), $this->version, 'all' );
 		wp_enqueue_style( 'simple-lightbox', $simplelightbox_dist . '/simple-lightbox.min.css', array(), $this->version, 'all' );
 
 		wp_enqueue_script( 'simple-lightbox', $simplelightbox_dist . '/simple-lightbox.min.js', array( 'jquery' ), $this->version, true );
