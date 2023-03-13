@@ -62,17 +62,17 @@ class RAD_Image_Viewer {
 		$show_title = get_field( 'display_set_title', $post_id );
 		$caption    = get_field( 'image_set_caption', $post_id );
 
-		$tooltip = array(
-			'gallery' => 'Click on any image thumbnail to access the full image and see image-specific details',
-			'rotation' => 'This viewer allows you to rotate the image around a vertical or horizontal axis. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: click and drag your cursor along the desired axis of rotation. Depending on the image, rotation may only be available around one axis. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.',
-			'depth' => 'This viewer emulates a DICOM-style image format. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: to increase or decrease the depth of your view, click or touch and drag your cursor up and down vertically. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.',
-		);
+		$tooltip_text = get_field( "help_text_$type", $post_id );
+		$edit_help_text = get_field( 'edit_help_text', $post_id );
+		if ( empty( $tooltip_text ) || ! $edit_help_text ) {
+			$tooltip_text = acf_get_field( "help_text_$type" )['default_value'];
+		}
 
 		ob_start();
 
 		echo "<div class='rad-image__wrapper'>";
 
-		$this->title_and_tooltip($post_id, $show_title, $type, $tooltip);
+		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text );
 
 		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
@@ -120,7 +120,7 @@ class RAD_Image_Viewer {
 		return ob_get_clean();
 	}
 
-	protected function title_and_tooltip( $post_id, $show_title, $type, $tooltip ) {
+	protected function title_and_tooltip( $post_id, $show_title, $tooltip ) {
 		?>
 		<div class="tooltip-wrapper">
 			<div class="title_container"><?php
@@ -131,7 +131,7 @@ class RAD_Image_Viewer {
 
 				?></div>
 			<div class="tooltip"><span class="dashicons dashicons-editor-help"></span>
-				<span class="tooltiptext tooltip-left"><?php echo $tooltip[ $type ]; ?></span>
+				<span class="tooltiptext tooltip-left"><?php echo $tooltip; ?></span>
 			</div>
 		</div>
 		<?php
