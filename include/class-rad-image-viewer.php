@@ -5,8 +5,8 @@ class RAD_Image_Viewer {
 	private string $version;
 	private string $plugin_url;
 	private int $rs_image_id;
-	private int $max_width;
-	private int $placeholder_height;
+	private int $max_width; //@TODO unused?
+	private float $aspect_ratio;
 
 	function __construct( $version ) {
 		$this->version    = $version;
@@ -14,7 +14,6 @@ class RAD_Image_Viewer {
 		$this->plugin_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
 
 		$this->set_hooks();
-
 	}
 
 	/**
@@ -237,8 +236,7 @@ class RAD_Image_Viewer {
 	 * @return string
 	 */
 	function get_backtrack_url( string $image_url, string $request_url ): string {
-		$image_root_relative_url = wp_make_link_relative( $image_url );
-
+		$image_root_relative_url = wp_make_link_relative( $image_url ); // @TODO unused?
 
 		// get relative path of upload directory
 		$upload_dir          = wp_make_link_relative( wp_upload_dir()['baseurl'] );
@@ -278,7 +276,6 @@ class RAD_Image_Viewer {
 
 		return $param;
 	}
-
 
 // prevent wordpress from creating alternate image resolutions for "rad_image" custom post type
 // @TODO add thumbnail size back in
@@ -351,15 +348,13 @@ class RAD_Image_Viewer {
 	 * @return array
 	 */
 	protected function get_keyshot_config(): array {
-		$post_id     = $this->rs_image_id;
-		$image_array = get_field( 'images', $post_id );
+		$post_id            = $this->rs_image_id;
+		$image_array        = get_field( 'images', $post_id );
+		$image_url          = wp_get_attachment_url( $image_array[0], 'full' );
+		$image_meta         = wp_get_attachment_metadata( $image_array[0], 'full' );
+		$this->aspect_ratio = floatval( $image_meta['height'] / $image_meta['width'] );
 
-		$image_url                = wp_get_attachment_url( $image_array[0], 'full' );
-		$image_meta               = wp_get_attachment_metadata( $image_array[0], 'full' );
-		$this->aspect_ratio       = floatval( $image_meta['height'] / $image_meta['width'] );
-		$this->placeholder_height = $this->max_width * $this->aspect_ratio;
-
-		// get relative url of the page that requested the image
+		// get relative url of the page that requested the image, for KeyShot
 		$request_url          = wp_make_link_relative( get_permalink() );
 		$image_dir_path_final = $this->get_backtrack_url( $image_url, $request_url );
 
@@ -377,10 +372,11 @@ class RAD_Image_Viewer {
 			$vStartIndex = $x_count - 1; // @TODO should this be 0? Why are we starting from the end?
 			$uStartIndex = 0;
 		} else {
+			// shouldn't be able to get here, fail silently
 			return array();
 		}
 
-		$dynamic_data = array(
+		return array(
 			'vCount'      => $vCount,
 			'uCount'      => $uCount,
 			'vStartIndex' => $vStartIndex,
@@ -390,7 +386,5 @@ class RAD_Image_Viewer {
 			'imageWidth'  => $image_meta['width'], // no longer used
 			'imageHeight' => $image_meta['height'], // no longer used
 		);
-
-		return $dynamic_data;
 	}
 }
