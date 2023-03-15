@@ -19,6 +19,11 @@ Implements three types of image viewers for working with sets of images
 - image rotation
 
 == Changelog ==
+0.1.7
+* dynamically sizes the image viewer to the aspect ratio of the image
+* implements help tooltips for the image viewer
+* makes help/tooltip text editable w/ each gallery
+
 0.1.6
 * changes all instances of dicom to rad_image
 * implement simple-lightbox npm package
