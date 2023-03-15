@@ -8,9 +8,9 @@ class RAD_Image_Viewer {
 	private int $max_width; //@TODO unused?
 	private float $aspect_ratio;
 
-	function __construct( $version ) {
+	function __construct( $version, $cpt_slug ) {
 		$this->version    = $version;
-		$this->cpt_slug   = 'rad_image';
+		$this->cpt_slug   = $cpt_slug;
 		$this->plugin_url = dirname( plugin_dir_url( __FILE__ ) ); // @TODO set this to plugin root file
 
 		$this->set_hooks();
@@ -23,8 +23,7 @@ class RAD_Image_Viewer {
 		add_shortcode( 'rad_image', array( $this, 'rad_image_shortcode_func' ) );
 		add_shortcode( 'dicom', array( $this, 'rad_image_shortcode_func' ) ); // deprecated
 
-		add_filter( 'upload_dir', array( $this, 'wp_custom_upload_dir' ) );
-		add_filter( 'intermediate_image_sizes_advanced', array( $this, 'remove_image_sizes' ), 1000 );
+
 
 		// add meta box to the custom post type for copying the shortcode
 		add_action( 'add_meta_boxes', array( $this, 'add_shortcode_meta_box' ) );
@@ -137,6 +136,10 @@ class RAD_Image_Viewer {
 		<?php
 	}
 
+	function enqueue_admin_scripts() {
+		wp_enqueue_script( 'rad-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/rad-image-viewer-admin.js', array(), $this->version, true );
+	}
+
 	public function enqueue_gallery_assets() {
 		$simplelightbox_dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
@@ -228,7 +231,6 @@ class RAD_Image_Viewer {
 		}
 	}
 
-
 	/**
 	 * @param bool|string $image_url
 	 * @param string $request_url
@@ -258,37 +260,6 @@ class RAD_Image_Viewer {
 		return $image_dir_path_final;
 	}
 
-
-	public function wp_custom_upload_dir( $param ) {
-		// Check if this is a rad_image post and if the images field is being used
-		$post_id   = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
-		$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
-		if ( $this->cpt_slug !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
-			return $param;
-		}
-
-		// Set a custom upload directory
-		$time          = current_time( 'mysql' );
-		$y             = substr( $time, 0, 4 );
-		$m             = substr( $time, 5, 2 );
-		$param['path'] = $param['basedir'] . "/$y/$m/rad-$post_id";
-		$param['url']  = $param['baseurl'] . "/$y/$m/rad-$post_id";
-
-		return $param;
-	}
-
-// prevent wordpress from creating alternate image resolutions for "rad_image" custom post type
-// @TODO add thumbnail size back in
-	function remove_image_sizes( $sizes ) {
-		$post_id = (int) $_REQUEST['post_id'] ?? 0;
-
-		if ( $this->cpt_slug === get_post_type( $post_id ) ) {
-			return array();
-		}
-
-		return $sizes;
-	}
-
 	/**
 	 * @param mixed $images
 	 * @param array $twoD
@@ -315,11 +286,6 @@ class RAD_Image_Viewer {
 
 		return array( $x_count, $y_count );
 	}
-
-	function enqueue_admin_scripts() {
-		wp_enqueue_script( 'rad-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/rad-image-viewer-admin.js', array(), $this->version, true );
-	}
-
 
 	function add_shortcode_meta_box() {
 		add_meta_box(
