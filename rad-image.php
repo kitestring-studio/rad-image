@@ -14,11 +14,14 @@
  * @package         Image_Viewer
  */
 
-const RAD_VERSION = '0.1.7';
+const RAD_VERSION  = '0.1.7';
 const RAD_CPT_SLUG = 'rad_image'; // @TODO pass into constructor
 
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+require_once plugin_dir_path( __FILE__ ) . 'include/hooks.php';
 add_action( 'plugins_loaded', function () {
 	if ( ! rad_plugin_dependencies_met() ) {
 		return;
@@ -27,7 +30,6 @@ add_action( 'plugins_loaded', function () {
 	//	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
 	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
-	require_once plugin_dir_path( __FILE__ ) . 'include/hooks.php';
 	require_once plugin_dir_path( __FILE__ ) . 'include/class-rad-image-viewer.php';
 
 	new RAD_Image_Viewer( RAD_VERSION );
