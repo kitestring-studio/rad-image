@@ -9,6 +9,7 @@
  * Text Domain:     rad_image
  * Domain Path:     /languages
  * Version:         0.1.7
+ * License:         GPL-2.0+
  *
  * @package         Image_Viewer
  */
