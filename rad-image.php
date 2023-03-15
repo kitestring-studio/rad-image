@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Image Viewer
  * Plugin URI:
- * GitHub Plugin URI: https://github.com/kitestring-studio/git-updater
+ * GitHub Plugin URI: https://github.com/kitestring-studio/rad-image
  * Description:
  * Author:          Kitestring Studio
  * Author URI:      https://kitestring.studio
