@@ -139,14 +139,20 @@
 
 	// let gallery = new SimpleLightbox('.gallery a');
 	simplelightbox.on('shown.simplelightbox', function () {
-		// quickly fade-out the element with the class "sl-close"
-		document.querySelector('.sl-close').style.opacity = 0;
-		// wait for 500ms
-
-
-
 		console.log("go!")
 		// do something…
+		centerCloseButton();
+	});
+
+	simplelightbox.on('prevDone.simplelightbox', function () {
+		centerCloseButton();
+	});
+
+	simplelightbox.on('nextDone.simplelightbox', function () {
+		centerCloseButton();
+	});
+
+	simplelightbox.on('changed.simplelightbox', function () {
 		centerCloseButton();
 	});
 
