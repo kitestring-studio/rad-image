@@ -1,3 +1,9 @@
+.sl-wrapper .sl-close {
+	background-color: black;
+	border-radius: 50px;
+	color: white !important;
+}
+
 .rad-image__wrapper > .gallery {
 	margin-bottom: 2rem;
 	justify-content: space-evenly;
