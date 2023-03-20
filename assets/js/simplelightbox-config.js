@@ -139,21 +139,22 @@
 
 	// let gallery = new SimpleLightbox('.gallery a');
 	simplelightbox.on('shown.simplelightbox', function () {
-		console.log("go!")
-		// do something…
 		centerCloseButton();
+		document.querySelector('.sl-close').classList.add('sl-ctl-style');
+		document.querySelector('.sl-next').classList.add('sl-ctl-style');
+		document.querySelector('.sl-prev').classList.add('sl-ctl-style');
 	});
 
 	simplelightbox.on('prevDone.simplelightbox', function () {
-		centerCloseButton();
+		// centerCloseButton();
 	});
 
 	simplelightbox.on('nextDone.simplelightbox', function () {
-		centerCloseButton();
+		// centerCloseButton();
 	});
 
 	simplelightbox.on('changed.simplelightbox', function () {
-		centerCloseButton();
+		// centerCloseButton();
 	});
 
 	function centerCloseButton() {
@@ -171,19 +172,6 @@
 		// slCloseEl.style.top = `${centerY - (slCloseEl.offsetHeight / 2)}px`;
 		slCloseEl.style.left = `${centerX}px`;
 		slCloseEl.style.top = `${centerY}px`;
-
-		// Animate the movement of .sl-close to its updated coordinates
-		/*slCloseEl.animate(
-			[
-				{ transform: `translate(${slCloseEl.style.left}, ${slCloseEl.style.top})` },
-				{ transform: `translate(${centerX - (slCloseEl.offsetWidth / 2)}px, ${centerY - (slCloseEl.offsetHeight / 2)}px)` }
-			],
-			{
-				duration: 500,
-				easing: 'ease-in-out',
-				fill: 'both'
-			}
-		);*/
 	}
 
 })();
