@@ -139,18 +139,20 @@ class RAD_Image_Viewer {
 
 	public function enqueue_gallery_assets() {
 		// check environment = production, use assets/dist, otherwise use node_modules
-		if ( wp_get_environment_type() === 'local' ) {
-			$dist = $this->plugin_url . '/dist';
-			wp_enqueue_script( 'simple-lightbox', $dist . '/gallery.bundle.js', array( 'jquery' ), $this->version, true );
-
-			wp_enqueue_style( 'gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
-		} else {
+		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) ) {
 
 			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
+
 			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.min.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
 
 			wp_enqueue_style( 'gallery', $dist . '/simple-lightbox.min.css', array(), $this->version, 'all' );
+		} else {
+			$dist = $this->plugin_url . '/dist';
+
+			wp_enqueue_script( 'simple-lightbox', $dist . '/gallery.bundle.js', array( 'jquery' ), $this->version, true );
+
+			wp_enqueue_style( 'gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
 		}
 
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons', 'gallery' ), $this->version, 'all' );
