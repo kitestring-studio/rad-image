@@ -162,7 +162,7 @@ class RAD_Image_Viewer {
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
 
 		wp_enqueue_script( 'keyshotxr', $this->plugin_url . '/assets/js/KeyShotXR.js', array(), $this->version, true );
-		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array(), $this->version, true );
+		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array( 'keyshotxr' ), $this->version, true );
 
 		$keyshot_config = $this->get_keyshot_config();
 		wp_localize_script( 'keyshot-init', 'rad_keyshot_config', $keyshot_config );

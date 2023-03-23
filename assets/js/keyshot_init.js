@@ -1,21 +1,10 @@
 var keyshotXR;
 
 function initKeyShotXR() {
-	// console.log(rad_keyshot_config)
-	// let image_width = rad_keyshot_config.imageWidth;
-	// let image_height = rad_keyshot_config.imageHeight;
-
-	// get width of the element #KeyShotXR
 	const width = document.getElementById("KeyShotXR").offsetWidth;
 	const height = document.getElementById("KeyShotXR").offsetHeight;
-	//calculate the dimensions of the image based on the width of the element
-	// const height = (image_height / image_width) * width;
-
-	//set the height of the element to the calculated height
-	// document.getElementById("KeyShotXR").style.height = height + "px";
 
 	const nameOfDiv = "KeyShotXR";
-	// const folderName = "../../wp-content/uploads/2022/12"; //will need to calculate the number of parent folders in the path
 	const folderName = rad_keyshot_config.folderName;
 	const viewPortWidth = width;
 	const viewPortHeight = height;
