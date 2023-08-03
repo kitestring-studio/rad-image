@@ -4,7 +4,7 @@
 
 .sl-wrapper .sl-ctl-style {
 	visibility: visible;
-	background-color: black;
+	background-color: #123c6d;
 	border-radius: 50px;
 	color: white !important;
 }
@@ -37,7 +37,7 @@
 	bottom: 0px;
 	position: absolute;
 	color: black;
-	background-color: white;
+	background-color: #edf3f9;
 	padding: 3px 6px;
 }
 
