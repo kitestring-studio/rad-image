@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/kitestring-studio/dicom-gallery#readme",
   "dependencies": {
-    "simplelightbox": "^2.12.1"
+    "simplelightbox": "^2.14.1"
   },
   "devDependencies": {
     "css-loader": "^6.7.3",
