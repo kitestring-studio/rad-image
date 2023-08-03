@@ -139,14 +139,15 @@ class RAD_Image_Viewer {
 
 	public function enqueue_gallery_assets() {
 		// check environment = production, use assets/dist, otherwise use node_modules
-		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) ) {
+		if ( in_array( wp_get_environment_type(), [ 'local', 'development', 'staging' ] ) ) {
 
 			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
 
-			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.min.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
+//			wp_enqueue_script( 'simple-lightbox', 'https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.1/simple-lightbox.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
 
-			wp_enqueue_style( 'rad-gallery', $dist . '/simple-lightbox.min.css', array(), $this->version, 'all' );
+			wp_enqueue_style( 'rad-gallery', $dist . '/simple-lightbox.css', array(), $this->version, 'all' );
 		} else {
 			$dist = $this->plugin_url . '/dist';
 
