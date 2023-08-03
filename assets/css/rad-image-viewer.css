@@ -160,6 +160,7 @@ div.ltblue-bkd.interiorhero {
 
 .rad-image__set-caption {
 	padding: 5px 5% 25px 5%;
+	margin-bottom:25px;
 	font-style: italic;
 	font-size: .9em;
 }
