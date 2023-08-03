@@ -155,7 +155,7 @@ class RAD_Image_Viewer {
 			wp_enqueue_style( 'rad-gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
 		}
 
-		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons', 'gallery' ), $this->version, 'all' );
+		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
 	}
 
 	public function enqueue_viewer_assets() {
