@@ -157,3 +157,9 @@ div.ltblue-bkd.interiorhero {
 	border-style: solid;
 	border-color: transparent transparent transparent #555;
 }*/
+
+.rad-image__set-caption {
+	padding: 5px 5% 25px 5%;
+	font-style: italic;
+	font-size: .9em;
+}

@@ -112,7 +112,7 @@ class RAD_Image_Viewer {
 				break;
 		}
 		if ( $caption ) {
-			echo '<p>' . esc_html( $caption ) . '</p>';
+			echo '<p class="rad-image__set-caption">' . esc_html( $caption ) . '</p>';
 		}
 
 		echo '</div>'; // end rad-image__wrapper
