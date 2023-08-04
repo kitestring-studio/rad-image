@@ -6,7 +6,7 @@
 		captionsData: "description",
 	};
 
-	const anchors = document.querySelectorAll("a");
+	const anchors = document.querySelectorAll(".rad-image__wrapper a");
 	const thumbnails = Array.from(anchors).filter(function (item) {
 		return /\.(jpe?g|png|gif|mp4|webp|bmp)(\?[^/]*)*$/i.test(item.getAttribute("href"));
 	});
@@ -36,7 +36,7 @@
 	});*/
 
 	simplelightbox.on('shown.simplelightbox', function () {
-		console.log('shown.simplelightbox')
+		// console.log('shown.simplelightbox')
 		// fade('.sl-close', false, "0ms")
 		positionCloseButton();
 		// fade('.sl-close', true, "100ms")
@@ -46,7 +46,7 @@
 	});
 
 	simplelightbox.on('change.simplelightbox', function () {
-		console.log('change.simplelightbox')
+		// console.log('change.simplelightbox')
 
 		fade('.sl-close', false, "0ms")
 		// document.querySelector('.sl-close').style.display = 'none';
@@ -54,7 +54,7 @@
 	});
 
 	simplelightbox.on('changed.simplelightbox', function () {
-		console.log("changed.simplelightbox")
+		// console.log("changed.simplelightbox")
 		// set timer for 10 seconds
 		setTimeout(function () {
 			console.log("timeout")
