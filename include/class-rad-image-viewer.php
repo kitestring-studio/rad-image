@@ -139,7 +139,9 @@ class RAD_Image_Viewer {
 
 	public function enqueue_gallery_assets() {
 		// check environment = production, use assets/dist, otherwise use node_modules
-		if ( in_array( wp_get_environment_type(), [ 'local', 'development', 'staging' ] ) ) {
+		$node_modules_installed = file_exists( dirname( plugin_dir_path( __FILE__ ) ) . '/node_modules/simplelightbox/dist' );
+
+		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) && $node_modules_installed) {
 
 			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
 
