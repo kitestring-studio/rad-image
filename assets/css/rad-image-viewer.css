@@ -12,6 +12,12 @@
 	color: white !important;
 }
 
+.rad-image__wrapper .rad-image__title {
+	font-weight: 600;
+	font-size: 22px;
+	color: #1D1D1D !important;
+}
+
 .rad-image__wrapper > .gallery {
 	margin-bottom: 2rem;
 	justify-content: space-evenly;

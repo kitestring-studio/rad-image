@@ -126,7 +126,7 @@ class RAD_Image_Viewer {
 			<div class="title_container"><?php
 				if ( $show_title ) {
 					$image_set_title = get_field( 'image_set_title', $post_id );
-					echo '<h3>' . esc_html( $image_set_title ) . '</h3>';
+					echo '<h3 class="rad-image__title">' . esc_html( $image_set_title ) . '</h3>';
 				}
 
 				?></div>
