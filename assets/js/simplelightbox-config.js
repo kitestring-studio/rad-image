@@ -19,13 +19,63 @@
 		var simplelightbox = new SimpleLightbox('a.simplelightbox', options);
 	}
 
-	// let gallery = new SimpleLightbox('.gallery a');
+	/*simplelightbox.on('prevImageLoaded.simplelightbox', function () {
+		console.log('nextImageLoaded.simplelightbox')
+		fade('.sl-close', false, "0ms")
+	});
+
+	simplelightbox.on('nextImageLoaded.simplelightbox', function () {
+		console.log('prevImageLoaded.simplelightbox')
+		fade('.sl-close', false, "0ms")
+	});
+
+	simplelightbox.on('show.simpleLightbox', function () {
+		console.log('show.simplelightbox')
+		fade('.sl-close', false, "0ms")
+
+	});*/
+
 	simplelightbox.on('shown.simplelightbox', function () {
+		console.log('shown.simplelightbox')
+		// fade('.sl-close', false, "0ms")
 		positionCloseButton();
+		// fade('.sl-close', true, "100ms")
 		document.querySelector('.sl-close').classList.add('sl-ctl-style');
 		document.querySelector('.sl-next').classList.add('sl-ctl-style');
 		document.querySelector('.sl-prev').classList.add('sl-ctl-style');
 	});
+
+	simplelightbox.on('change.simplelightbox', function () {
+		console.log('change.simplelightbox')
+
+		fade('.sl-close', false, "0ms")
+		// document.querySelector('.sl-close').style.display = 'none';
+
+	});
+
+	simplelightbox.on('changed.simplelightbox', function () {
+		console.log("changed.simplelightbox")
+		// set timer for 10 seconds
+		setTimeout(function () {
+			console.log("timeout")
+			positionCloseButton();
+
+			// document.querySelector('.sl-close').style.display = 'block';
+			fade('.sl-close', true)
+
+			// hide the close button
+		}, 300)
+	});
+
+	/*simplelightbox.on('close.simplelightbox', function () {
+		console.log('close.simplelightbox')
+
+		fade('.sl-close', false)
+		// document.querySelector('.sl-close').style.display = 'none';
+
+	});*/
+
+
 
 	function positionCloseButton() {
 		const slImageEl = document.querySelector('.sl-image');
@@ -42,6 +92,21 @@
 		// slCloseEl.style.top = `${centerY - (slCloseEl.offsetHeight / 2)}px`;
 		slCloseEl.style.left = `${centerX}px`;
 		slCloseEl.style.top = `${centerY}px`;
+	}
+
+	function fade(selector, fadeIn, duration = '200ms') {
+		var element = document.querySelector(selector);
+		if (!element) return;
+
+		// Set the transition property with the provided duration
+		element.style.transition = `opacity ${duration}`;
+
+		// Trigger reflow to ensure the transition starts
+		element.offsetWidth;
+
+		// Set the opacity based on the fadeIn parameter
+		element.style.opacity = fadeIn ? '1' : '0';
+		console.log( fadeIn ? 'fadeIn' : 'fadeOut' , duration)
 	}
 
 })();
