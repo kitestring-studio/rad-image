@@ -168,7 +168,10 @@ class RAD_Image_Viewer {
 		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array( 'keyshotxr' ), $this->version, true );
 
 		$keyshot_config = $this->get_keyshot_config();
-		wp_localize_script( 'keyshot-init', 'rad_keyshot_config', $keyshot_config );
+		$id= $keyshot_config['id'];
+
+		wp_localize_script( "keyshot-init", "rad_keyshot_config_$id", $keyshot_config );
+		wp_add_inline_script("keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
 	}
 
 	/**
@@ -392,6 +395,7 @@ class RAD_Image_Viewer {
 		}
 
 		return array(
+			'id'          => $post_id,
 			'vCount'      => $vCount,
 			'uCount'      => $uCount,
 			'vStartIndex' => $vStartIndex,

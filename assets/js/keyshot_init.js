@@ -1,10 +1,10 @@
-var keyshotXR;
 
-function initKeyShotXR() {
-	const width = document.getElementById("KeyShotXR").offsetWidth;
-	const height = document.getElementById("KeyShotXR").offsetHeight;
+function initKeyShotXR(rad_keyshot_config) {
+	let keyshot_id = "KeyShotXR-" + rad_keyshot_config.id;
+	const width = document.getElementById(keyshot_id).offsetWidth;
+	const height = document.getElementById(keyshot_id).offsetHeight;
 
-	const nameOfDiv = "KeyShotXR";
+	const nameOfDiv = keyshot_id;
 	const folderName = rad_keyshot_config.folderName;
 	const viewPortWidth = width;
 	const viewPortHeight = height;
@@ -32,7 +32,5 @@ function initKeyShotXR() {
 	const vReverse = false;
 	const hotspots = {};
 	const isIBooksWidget = false;
-	keyshotXR = new keyshotXR(nameOfDiv, folderName, viewPortWidth, viewPortHeight, backgroundColor, uCount, vCount, uWrap, vWrap, uMouseSensitivity, vMouseSensitivity, uStartIndex, vStartIndex, minZoom, maxZoom, rotationDamping, downScaleToBrowser, addDownScaleGUIButton, downloadOnInteraction, imageExtension, showLoading, loadingIcon, allowFullscreen, uReverse, vReverse, hotspots, isIBooksWidget);
+	new keyshotXR(nameOfDiv, folderName, viewPortWidth, viewPortHeight, backgroundColor, uCount, vCount, uWrap, vWrap, uMouseSensitivity, vMouseSensitivity, uStartIndex, vStartIndex, minZoom, maxZoom, rotationDamping, downScaleToBrowser, addDownScaleGUIButton, downloadOnInteraction, imageExtension, showLoading, loadingIcon, allowFullscreen, uReverse, vReverse, hotspots, isIBooksWidget);
 }
-
-window.onload = initKeyShotXR;
