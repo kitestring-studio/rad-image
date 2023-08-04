@@ -1,9 +1,12 @@
 .sl-wrapper .sl-close {
-	visibility: hidden;
+	/*visibility: hidden;*/
+	background-color: #123c6d;
+	border-radius: 50px;
+	color: white !important;
 }
 
 .sl-wrapper .sl-ctl-style {
-	visibility: visible;
+	/*visibility: visible;*/
 	background-color: #123c6d;
 	border-radius: 50px;
 	color: white !important;
