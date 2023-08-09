@@ -19,6 +19,12 @@ Implements three types of image viewers for working with sets of images
 - image rotation
 
 == Changelog ==
+1.1.0
+* adds support for multiple galleries on a single page
+* slightly reduces max size of images in lightbox
+* updates simple-lightbox library to 2.14.1
+* many styling tweaks
+
 1.0.0
 * bundles simplelightbox JS with webpack
 
