@@ -10,6 +10,7 @@
 			captionSelector: "img",
 			captionType: "data",
 			captionsData: "description",
+			heightRatio: .85,
 		};
 
 		const anchors = galleryElement.querySelectorAll("a");
