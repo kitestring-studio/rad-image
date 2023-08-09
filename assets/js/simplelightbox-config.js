@@ -1,80 +1,64 @@
 (function () {
 
-	const options = {
-		captionSelector: "img",
-		captionType: "data",
-		captionsData: "description",
-	};
-
-	const anchors = document.querySelectorAll(".rad-image__wrapper a");
-	const thumbnails = Array.from(anchors).filter(function (item) {
-		return /\.(jpe?g|png|gif|mp4|webp|bmp)(\?[^/]*)*$/i.test(item.getAttribute("href"));
-	});
-
-	for (const thumbnail of thumbnails) {
-		thumbnail.classList.add('simplelightbox');
+	const galleryElements = document.querySelectorAll('.rad-image__wrapper .gallery');
+	for (let element of galleryElements) {
+		setupGallery(element);
 	}
 
-	if (document.querySelectorAll('a.simplelightbox').length) {
-		var simplelightbox = new SimpleLightbox('a.simplelightbox', options);
+	function setupGallery(galleryElement) {
+		const options = {
+			captionSelector: "img",
+			captionType: "data",
+			captionsData: "description",
+			heightRatio: .85,
+		};
+
+		const anchors = galleryElement.querySelectorAll("a");
+		const thumbnails = Array.from(anchors).filter(function (item) {
+			return /\.(jpe?g|png|gif|mp4|webp|bmp)(\?[^/]*)*$/i.test(item.getAttribute("href"));
+		});
+
+		for (const thumbnail of thumbnails) {
+			thumbnail.classList.add('simplelightbox');
+		}
+
+		if (galleryElement.querySelectorAll('a.simplelightbox').length) {
+			var simplelightbox = new SimpleLightbox(galleryElement.querySelectorAll('a.simplelightbox'), options);
+
+			// ... (rest of the logic related to simplelightbox)
+			simplelightbox.on('shown.simplelightbox', function () {
+				// console.log('shown.simplelightbox')
+				// fade('.sl-close', false, "0ms")
+				positionCloseButton();
+				// fade('.sl-close', true, "100ms")
+				document.querySelector('.sl-close').classList.add('sl-ctl-style');
+				document.querySelector('.sl-next').classList.add('sl-ctl-style');
+				document.querySelector('.sl-prev').classList.add('sl-ctl-style');
+			});
+
+			simplelightbox.on('change.simplelightbox', function () {
+				// console.log('change.simplelightbox')
+
+				fade('.sl-close', false, "0ms")
+				// document.querySelector('.sl-close').style.display = 'none';
+
+			});
+
+			simplelightbox.on('changed.simplelightbox', function () {
+				// console.log("changed.simplelightbox")
+				// set timer for 10 seconds
+				setTimeout(function () {
+					positionCloseButton();
+
+					// document.querySelector('.sl-close').style.display = 'block';
+					fade('.sl-close', true)
+
+					// hide the close button
+				}, 300)
+			});
+
+		}
 	}
-
-	/*simplelightbox.on('prevImageLoaded.simplelightbox', function () {
-		console.log('nextImageLoaded.simplelightbox')
-		fade('.sl-close', false, "0ms")
-	});
-
-	simplelightbox.on('nextImageLoaded.simplelightbox', function () {
-		console.log('prevImageLoaded.simplelightbox')
-		fade('.sl-close', false, "0ms")
-	});
-
-	simplelightbox.on('show.simpleLightbox', function () {
-		console.log('show.simplelightbox')
-		fade('.sl-close', false, "0ms")
-
-	});*/
-
-	simplelightbox.on('shown.simplelightbox', function () {
-		// console.log('shown.simplelightbox')
-		// fade('.sl-close', false, "0ms")
-		positionCloseButton();
-		// fade('.sl-close', true, "100ms")
-		document.querySelector('.sl-close').classList.add('sl-ctl-style');
-		document.querySelector('.sl-next').classList.add('sl-ctl-style');
-		document.querySelector('.sl-prev').classList.add('sl-ctl-style');
-	});
-
-	simplelightbox.on('change.simplelightbox', function () {
-		// console.log('change.simplelightbox')
-
-		fade('.sl-close', false, "0ms")
-		// document.querySelector('.sl-close').style.display = 'none';
-
-	});
-
-	simplelightbox.on('changed.simplelightbox', function () {
-		// console.log("changed.simplelightbox")
-		// set timer for 10 seconds
-		setTimeout(function () {
-			console.log("timeout")
-			positionCloseButton();
-
-			// document.querySelector('.sl-close').style.display = 'block';
-			fade('.sl-close', true)
-
-			// hide the close button
-		}, 300)
-	});
-
-	/*simplelightbox.on('close.simplelightbox', function () {
-		console.log('close.simplelightbox')
-
-		fade('.sl-close', false)
-		// document.querySelector('.sl-close').style.display = 'none';
-
-	});*/
-
 
 
 	function positionCloseButton() {
@@ -106,7 +90,7 @@
 
 		// Set the opacity based on the fadeIn parameter
 		element.style.opacity = fadeIn ? '1' : '0';
-		console.log( fadeIn ? 'fadeIn' : 'fadeOut' , duration)
+		// console.log( fadeIn ? 'fadeIn' : 'fadeOut' , duration)
 	}
 
 })();
