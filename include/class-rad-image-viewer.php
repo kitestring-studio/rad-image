@@ -384,7 +384,9 @@ class RAD_Image_Viewer {
 		} elseif ( $type === 'depth' ) {
 			$vCount      = $x_count;
 			$uCount      = $y_count;
-			$vStartIndex = $x_count - 1; // @TODO should this be 0? Why are we starting from the end?
+
+			// @TODO testing here
+			$vStartIndex = floor( $x_count / 2 );
 			$uStartIndex = 0;
 		} else {
 			// shouldn't be able to get here, fail silently
