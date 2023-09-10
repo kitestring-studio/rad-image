@@ -10,6 +10,7 @@
 			captionSelector: "img",
 			captionType: "data",
 			captionsData: "description",
+			captionPosition: "outside",
 			heightRatio: .85,
 		};
 
