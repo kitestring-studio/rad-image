@@ -386,7 +386,7 @@ class RAD_Image_Viewer {
 			$uCount      = $y_count;
 
 			// @TODO testing here
-			$vStartIndex = floor( $x_count / 2 );
+			$vStartIndex = (int) floor( $x_count / 2 );
 			$uStartIndex = 0;
 		} else {
 			// shouldn't be able to get here, fail silently
