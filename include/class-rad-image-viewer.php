@@ -96,7 +96,7 @@ class RAD_Image_Viewer {
 
 		echo "<div class='rad-image__wrapper rad-image__wrapper-$viewer_count rad-image__$type'>";
 
-		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text );
+		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text, $viewer_count );
 
 		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
@@ -141,13 +141,14 @@ class RAD_Image_Viewer {
 		return ob_get_clean();
 	}
 
-	protected function title_and_tooltip( $post_id, $show_title, $tooltip ) {
+	protected function title_and_tooltip( $post_id, $show_title, $tooltip, $viewer_count ) {
 		?>
 		<div class="tooltip-wrapper">
-			<div class="title_container"><?php
+			<div id="image-viewer__title-<?php echo $viewer_count; ?>" class="title_container image-viewer__title">
+				<?php
 				if ( $show_title ) {
 					$image_set_title = get_field( 'image_set_title', $post_id );
-					echo '<h3 class="rad-image__title">' . esc_html( $image_set_title ) . '</h3>';
+					echo "<h3 class='rad-image__title'><a href='#image-viewer__title-$viewer_count' >" . esc_html( $image_set_title ) . "</a></h3>";
 				}
 
 				?></div>
