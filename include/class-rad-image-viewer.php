@@ -90,7 +90,7 @@ class RAD_Image_Viewer {
 
 		ob_start();
 
-		echo "<div class='rad-image__wrapper'>";
+		echo "<div class='rad-image__wrapper rad-image__$type'>";
 
 		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text );
 
