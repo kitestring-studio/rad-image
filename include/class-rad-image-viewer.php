@@ -7,6 +7,7 @@ class RAD_Image_Viewer {
 	private int $rs_image_id;
 	private int $max_width; //@TODO unused?
 	private float $aspect_ratio;
+	private static int $viewer_count = 0;
 
 	function __construct( $version ) {
 		$this->version    = $version;
@@ -36,6 +37,8 @@ class RAD_Image_Viewer {
 
 
 	public function rad_image_shortcode_func( $atts ) {
+		self::$viewer_count +=1;
+		$viewer_count = self::$viewer_count;
 		$atts = shortcode_atts(
 			array( 'id' => '', 'max_width' => '750' ),
 			$atts,
@@ -91,7 +94,7 @@ class RAD_Image_Viewer {
 
 		ob_start();
 
-		echo "<div class='rad-image__wrapper rad-image__$type'>";
+		echo "<div class='rad-image__wrapper rad-image__wrapper-$viewer_count rad-image__$type'>";
 
 		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text );
 
@@ -187,7 +190,6 @@ class RAD_Image_Viewer {
 
 		$keyshot_config = $this->get_keyshot_config();
 		$id= $keyshot_config['id'];
-
 		wp_localize_script( "keyshot-init", "rad_keyshot_config_$id", $keyshot_config );
 		wp_add_inline_script("keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
 	}
@@ -415,7 +417,8 @@ class RAD_Image_Viewer {
 		}
 
 		return array(
-			'id'          => $post_id,
+//			'id'          => $post_id,
+			'id'          => self::$viewer_count,
 			'vCount'      => $vCount,
 			'uCount'      => $uCount,
 			'vStartIndex' => $vStartIndex,
