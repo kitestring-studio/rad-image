@@ -62,6 +62,24 @@ class RAD_Image_Viewer {
 			return '';
 		}
 
+		// bold, italics, other formatting, and links are allowed in the caption
+		$allowed_html = array(
+			'a' => array(
+				'href' => array(),
+				'referrerpolicy' => array(),
+				'title' => array(),
+				'target' => array('_blank', '_self', '_parent', '_top'),
+			),
+			'b' => array(),
+			'i' => array(),
+			'em' => array(),
+			'strong' => array(),
+			'span' => array(),
+			'div' => array(),
+			'br' => array(),
+			'p' => array(),
+		);
+
 		$show_title = get_field( 'display_set_title', $post_id );
 		$caption    = get_field( 'image_set_caption', $post_id );
 
@@ -73,7 +91,7 @@ class RAD_Image_Viewer {
 
 		ob_start();
 
-		echo "<div class='rad-image__wrapper'>";
+		echo "<div class='rad-image__wrapper rad-image__$type'>";
 
 		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text );
 
@@ -112,7 +130,7 @@ class RAD_Image_Viewer {
 				break;
 		}
 		if ( $caption ) {
-			echo '<p class="rad-image__set-caption">' . esc_html( $caption ) . '</p>';
+			echo '<p class="rad-image__set-caption">' . wp_kses( $caption, $allowed_html ) . '</p>';
 		}
 
 		echo '</div>'; // end rad-image__wrapper
@@ -387,7 +405,9 @@ class RAD_Image_Viewer {
 		} elseif ( $type === 'depth' ) {
 			$vCount      = $x_count;
 			$uCount      = $y_count;
-			$vStartIndex = $x_count - 1; // @TODO should this be 0? Why are we starting from the end?
+
+			// @TODO testing here
+			$vStartIndex = (int) floor( $x_count / 2 );
 			$uStartIndex = 0;
 		} else {
 			// shouldn't be able to get here, fail silently

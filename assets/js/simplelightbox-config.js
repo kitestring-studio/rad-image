@@ -10,7 +10,9 @@
 			captionSelector: "img",
 			captionType: "data",
 			captionsData: "description",
+			captionPosition: "outside",
 			heightRatio: .85,
+			// fadeSpeed: 0, // disable caption fadein, but also disables slide animation
 		};
 
 		const anchors = galleryElement.querySelectorAll("a");
