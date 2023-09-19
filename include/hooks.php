@@ -70,3 +70,37 @@ function render_image_viewer_shortcode_in_content( $content ) {
 }
 
 add_filter( 'the_content', 'render_image_viewer_shortcode_in_content' );
+
+/**
+ * Creates rad_image "type" column
+ *
+ * @param $columns
+ *
+ * @return mixed
+ */
+function add_type_column($columns) {
+	$columns['type'] = 'Viewer Type';
+	return $columns;
+}
+add_filter('manage_rad_image_posts_columns', 'add_type_column');
+
+/**
+ * Populates values in rad_image 'type' column
+ *
+ * @param $column
+ * @param $post_id
+ *
+ * @return void
+ */
+function populate_type_column_data( $column, $post_id ) {
+	if ( $column === 'type' ) {
+		$type_value = get_field( 'type', $post_id );
+		if ( $type_value ) {
+			echo esc_html( $type_value );
+		} else {
+			echo '—'; // Display a placeholder if the field is empty.
+		}
+	}
+}
+
+add_action('manage_rad_image_posts_custom_column', 'populate_type_column_data', 10, 2);
