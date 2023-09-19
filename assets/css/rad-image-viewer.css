@@ -180,6 +180,16 @@ div.ltblue-bkd.interiorhero {
 
 /* rotation/depth  viewer */
 
+.rad-image__wrapper .KeyShotXR {
+	margin-bottom: 2rem;
+}
+.rad-image__wrapper .KeyShotXR img {
+	max-width: 100%;
+}
+.KeyShotXR #placeholder:not(:only-child) {
+	display: none;
+}
+
 /* constrain height to 75hv */
 .rad-image__rotation *,
 .rad-image__depth *{
@@ -194,3 +204,4 @@ div.ltblue-bkd.interiorhero {
 	width: auto !important;
 	left: auto !important;
 }
+
