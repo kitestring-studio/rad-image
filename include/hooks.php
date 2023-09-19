@@ -51,3 +51,22 @@ function rad_acf_json_save_point( $path ) {
 }
 
 add_filter( 'acf/settings/save_json', 'rad_acf_json_save_point' );
+
+
+/**
+ * displays the rad_image shortcode as the content of the rad_image post type
+ *
+ * @param $content
+ *
+ * @return string|string[]|null
+ */
+function render_image_viewer_shortcode_in_content( $content ) {
+	global $post;
+	if ( is_singular( 'rad_image' ) ) {
+		return do_shortcode( '[rad_image id=' . $post->ID . ']' );
+	}
+
+	return $content;
+}
+
+add_filter( 'the_content', 'render_image_viewer_shortcode_in_content' );
