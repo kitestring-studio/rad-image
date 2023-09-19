@@ -62,7 +62,7 @@ add_filter( 'acf/settings/save_json', 'rad_acf_json_save_point' );
  */
 function render_image_viewer_shortcode_in_content( $content ) {
 	global $post;
-	if ( is_singular( 'rad_image' ) ) {
+	if ( current_user_can('manage_options') && is_singular( 'rad_image' ) ) {
 		return do_shortcode( '[rad_image id=' . $post->ID . ']' );
 	}
 
