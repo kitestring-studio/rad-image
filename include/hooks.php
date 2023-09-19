@@ -104,3 +104,31 @@ function populate_type_column_data( $column, $post_id ) {
 }
 
 add_action('manage_rad_image_posts_custom_column', 'populate_type_column_data', 10, 2);
+
+// add 'slug' column
+function add_slug_column($columns) {
+	$columns['slug'] = 'Slug';
+	return $columns;
+}
+add_filter('manage_rad_image_posts_columns', 'add_slug_column', 1);
+
+/**
+ * Populates values in rad_image 'slug' column
+ *
+ * @param $column
+ * @param $post_id
+ *
+ * @return void
+ */
+function populate_slug_column_data( $column, $post_id ) {
+	if ( $column === 'slug' ) {
+		global $post;
+		$slug_value = $post->post_name;
+		if ( $slug_value ) {
+			echo esc_html( $slug_value );
+		} else {
+			echo '—'; // Display a placeholder if the field is empty.
+		}
+	}
+}
+add_action('manage_rad_image_posts_custom_column', 'populate_slug_column_data', 10, 2);
