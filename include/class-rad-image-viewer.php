@@ -62,7 +62,7 @@ class RAD_Image_Viewer {
 			return '';
 		}
 
-		// bold, italics, and links are allowed in the caption
+		// bold, italics, other formatting, and links are allowed in the caption
 		$allowed_html = array(
 			'a' => array(
 				'href' => array(),
@@ -72,6 +72,7 @@ class RAD_Image_Viewer {
 			),
 			'b' => array(),
 			'i' => array(),
+			'em' => array(),
 			'strong' => array(),
 			'span' => array(),
 			'div' => array(),
