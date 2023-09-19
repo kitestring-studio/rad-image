@@ -37,21 +37,29 @@ class RAD_Image_Viewer {
 
 
 	public function rad_image_shortcode_func( $atts ) {
-		self::$viewer_count +=1;
-		$viewer_count = self::$viewer_count;
-		$atts = shortcode_atts(
-			array( 'id' => '', 'max_width' => '750' ),
+		self::$viewer_count += 1;
+		$viewer_count       = self::$viewer_count;
+		$atts               = shortcode_atts(
+			array( 'id' => '', 'slug' => '', 'max_width' => '750' ),
 			$atts,
 			'custom_post_type'
 		);
 
-		$this->max_width = (int) $atts['max_width'];
-		$post_id         = (int) $atts['id'];
+		// make sure one of $post_id or post_slug is set, and that the post exists. Populate $post.
+		if ( ! $atts['id'] && ! $atts['slug'] ) {
+			return 'Invalid slug or id for [rad_image]';
+		} elseif ( $atts['id'] ) {
+			$post = get_post( $atts['id'] );
+		} else {
+			$post = get_page_by_path( $atts['slug'], OBJECT, $this->cpt_slug );
+		}
 
+		$post_id = $post->ID;
 		if ( get_post_type( $post_id ) !== $this->cpt_slug ) {
 			return '';
 		}
 
+		$this->max_width   = (int) $atts['max_width'];
 		$this->rs_image_id = $post_id;
 		$type              = get_field( 'type', $post_id );
 
@@ -67,20 +75,20 @@ class RAD_Image_Viewer {
 
 		// bold, italics, other formatting, and links are allowed in the caption
 		$allowed_html = array(
-			'a' => array(
-				'href' => array(),
+			'a'      => array(
+				'href'           => array(),
 				'referrerpolicy' => array(),
-				'title' => array(),
-				'target' => array('_blank', '_self', '_parent', '_top'),
+				'title'          => array(),
+				'target'         => array( '_blank', '_self', '_parent', '_top' ),
 			),
-			'b' => array(),
-			'i' => array(),
-			'em' => array(),
+			'b'      => array(),
+			'i'      => array(),
+			'em'     => array(),
 			'strong' => array(),
-			'span' => array(),
-			'div' => array(),
-			'br' => array(),
-			'p' => array(),
+			'span'   => array(),
+			'div'    => array(),
+			'br'     => array(),
+			'p'      => array(),
 		);
 
 		$show_title = get_field( 'display_set_title', $post_id );
