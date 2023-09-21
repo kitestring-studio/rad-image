@@ -1,291 +1,293 @@
 {
-    "key": "group_638c84c216521",
-    "title": "RAD Image Viewer",
-    "fields": [
-        {
-            "key": "field_63974fe0e18e1",
-            "label": "Type",
-            "name": "type",
-            "aria-label": "",
-            "type": "radio",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "25",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "gallery": "Gallery",
-                "rotation": "Rotation",
-                "depth": "Depth"
-            },
-            "default_value": "a",
-            "return_format": "value",
-            "allow_null": 0,
-            "other_choice": 0,
-            "layout": "vertical",
-            "save_other_choice": 0
-        },
-        {
-            "key": "field_638c84c253017",
-            "label": "Image Set Title",
-            "name": "image_set_title",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_638c85e653018",
-            "label": "Display Set Title",
-            "name": "display_set_title",
-            "aria-label": "",
-            "type": "checkbox",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "25",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "true": "Display on frontend"
-            },
-            "default_value": [
-                "true"
-            ],
-            "return_format": "value",
-            "allow_custom": 0,
-            "layout": "vertical",
-            "toggle": 0,
-            "save_custom": 0
-        },
-        {
-            "key": "field_63bdeab575c28",
-            "label": "Image Set Caption",
-            "name": "image_set_caption",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "acfe_textarea_code": 0,
-            "maxlength": "",
-            "rows": 3,
-            "placeholder": "",
-            "new_lines": ""
-        },
-        {
-            "key": "field_638c863653019",
-            "label": "Images",
-            "name": "images",
-            "aria-label": "",
-            "type": "gallery",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "id",
-            "library": "uploadedTo",
-            "min": "",
-            "max": "",
-            "min_width": "",
-            "min_height": "",
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": "",
-            "insert": "append",
-            "preview_size": "medium"
-        },
-        {
-            "key": "field_640f3e255cdc7",
-            "label": "",
-            "name": "edit_help_text",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "15",
-                "class": "",
-                "id": ""
-            },
-            "message": "Edit help text",
-            "default_value": 0,
-            "ui": 0,
-            "ui_on_text": "",
-            "ui_off_text": ""
-        },
-        {
-            "key": "field_640f3cc0cb274",
-            "label": "Help Text",
-            "name": "help_text_gallery",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_63974fe0e18e1",
-                        "operator": "==",
-                        "value": "gallery"
-                    },
-                    {
-                        "field": "field_640f3e255cdc7",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "85",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "Click on any image thumbnail to access the full image and see image-specific details.",
-            "maxlength": "",
-            "rows": 3,
-            "placeholder": "",
-            "new_lines": ""
-        },
-        {
-            "key": "field_640f3dc639684",
-            "label": "Help Text",
-            "name": "help_text_rotation",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_63974fe0e18e1",
-                        "operator": "==",
-                        "value": "rotation"
-                    },
-                    {
-                        "field": "field_640f3e255cdc7",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "85",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "This viewer allows you to rotate the image around a vertical or horizontal axis. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: click and drag your cursor along the desired axis of rotation. Depending on the image, rotation may only be available around one axis. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.",
-            "maxlength": "",
-            "rows": 3,
-            "placeholder": "",
-            "new_lines": ""
-        },
-        {
-            "key": "field_640f3dee39685",
-            "label": "Help Text",
-            "name": "help_text_depth",
-            "aria-label": "",
-            "type": "textarea",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_63974fe0e18e1",
-                        "operator": "==",
-                        "value": "depth"
-                    },
-                    {
-                        "field": "field_640f3e255cdc7",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "85",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "This viewer emulates a DICOM-style image format. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: to increase or decrease the depth of your view, click or touch and drag your cursor up and down vertically. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.",
-            "maxlength": "",
-            "rows": 3,
-            "placeholder": "",
-            "new_lines": ""
-        },
-        {
-            "key": "field_640f3f33f3054",
-            "label": "",
-            "name": "",
-            "aria-label": "",
-            "type": "message",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_640f3e255cdc7",
-                        "operator": "!=",
-                        "value": "yes"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "85",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "new_lines": "wpautop",
-            "esc_html": 0
-        }
-    ],
-    "location": [
+  "key": "group_638c84c216521",
+  "title": "RAD Image Viewer",
+  "fields": [
+    {
+      "key": "field_63974fe0e18e1",
+      "label": "Type",
+      "name": "type",
+      "aria-label": "",
+      "type": "radio",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "25",
+        "class": "",
+        "id": ""
+      },
+      "choices": {
+        "gallery": "Gallery",
+        "rotation": "Rotation",
+        "depth": "Depth",
+        "single": "Single"
+      },
+      "default_value": "a",
+      "return_format": "value",
+      "allow_null": 0,
+      "other_choice": 0,
+      "layout": "vertical",
+      "save_other_choice": 0
+    },
+    {
+      "key": "field_638c84c253017",
+      "label": "Image Set Title",
+      "name": "image_set_title",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "50",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_638c85e653018",
+      "label": "Display Set Title",
+      "name": "display_set_title",
+      "aria-label": "",
+      "type": "checkbox",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "25",
+        "class": "",
+        "id": ""
+      },
+      "choices": {
+        "true": "Display on frontend"
+      },
+      "default_value": [
+        "true"
+      ],
+      "return_format": "value",
+      "allow_custom": 0,
+      "layout": "vertical",
+      "toggle": 0,
+      "save_custom": 0,
+      "custom_choice_button_text": "Add new choice"
+    },
+    {
+      "key": "field_63bdeab575c28",
+      "label": "Image Set Caption",
+      "name": "image_set_caption",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "acfe_textarea_code": 0,
+      "maxlength": "",
+      "rows": 3,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_638c863653019",
+      "label": "Images",
+      "name": "images",
+      "aria-label": "",
+      "type": "gallery",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "return_format": "id",
+      "library": "uploadedTo",
+      "min": "",
+      "max": "",
+      "min_width": "",
+      "min_height": "",
+      "min_size": "",
+      "max_width": "",
+      "max_height": "",
+      "max_size": "",
+      "mime_types": "",
+      "insert": "append",
+      "preview_size": "medium"
+    },
+    {
+      "key": "field_640f3e255cdc7",
+      "label": "",
+      "name": "edit_help_text",
+      "aria-label": "",
+      "type": "true_false",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "15",
+        "class": "",
+        "id": ""
+      },
+      "message": "Edit help text",
+      "default_value": 0,
+      "ui": 0,
+      "ui_on_text": "",
+      "ui_off_text": ""
+    },
+    {
+      "key": "field_640f3cc0cb274",
+      "label": "Help Text",
+      "name": "help_text_gallery",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": [
         [
-            {
-                "param": "post_type",
-                "operator": "==",
-                "value": "rad_image"
-            }
+          {
+            "field": "field_63974fe0e18e1",
+            "operator": "==",
+            "value": "gallery"
+          },
+          {
+            "field": "field_640f3e255cdc7",
+            "operator": "==",
+            "value": "1"
+          }
         ]
-    ],
-    "menu_order": 0,
-    "position": "normal",
-    "style": "default",
-    "label_placement": "top",
-    "instruction_placement": "label",
-    "hide_on_screen": "",
-    "active": true,
-    "description": "",
-    "show_in_rest": 0,
-    "modified": 1678725608
+      ],
+      "wrapper": {
+        "width": "85",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "Click on any image thumbnail to access the full image and see image-specific details.",
+      "maxlength": "",
+      "rows": 3,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_640f3dc639684",
+      "label": "Help Text",
+      "name": "help_text_rotation",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": [
+        [
+          {
+            "field": "field_63974fe0e18e1",
+            "operator": "==",
+            "value": "rotation"
+          },
+          {
+            "field": "field_640f3e255cdc7",
+            "operator": "==",
+            "value": "1"
+          }
+        ]
+      ],
+      "wrapper": {
+        "width": "85",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "This viewer allows you to rotate the image around a vertical or horizontal axis. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: click and drag your cursor along the desired axis of rotation. Depending on the image, rotation may only be available around one axis. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.",
+      "maxlength": "",
+      "rows": 3,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_640f3dee39685",
+      "label": "Help Text",
+      "name": "help_text_depth",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": [
+        [
+          {
+            "field": "field_63974fe0e18e1",
+            "operator": "==",
+            "value": "depth"
+          },
+          {
+            "field": "field_640f3e255cdc7",
+            "operator": "==",
+            "value": "1"
+          }
+        ]
+      ],
+      "wrapper": {
+        "width": "85",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "This viewer emulates a DICOM-style image format. To use this image viewer, you’ll need a mouse or track pad. With a trackpad: to increase or decrease the depth of your view, click or touch and drag your cursor up and down vertically. To zoom in and out, use two fingers to swipe up and down or reference your device’s zoom settings.",
+      "maxlength": "",
+      "rows": 3,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_640f3f33f3054",
+      "label": "",
+      "name": "",
+      "aria-label": "",
+      "type": "message",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": [
+        [
+          {
+            "field": "field_640f3e255cdc7",
+            "operator": "!=",
+            "value": "yes"
+          }
+        ]
+      ],
+      "wrapper": {
+        "width": "85",
+        "class": "",
+        "id": ""
+      },
+      "message": "",
+      "new_lines": "wpautop",
+      "esc_html": 0
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "rad_image"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "",
+  "show_in_rest": 0,
+  "modified": 1678725608
 }
