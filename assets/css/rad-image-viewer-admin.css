@@ -1,8 +1,6 @@
 /* rad-image post editor */
 
-/*// insert a css rule for the copied state where color=green*/
 /* shortcode metabox */
-
 #rad_shortcode_meta_box .inside {
 	display: flex;
 }
