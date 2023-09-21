@@ -365,6 +365,7 @@ class RAD_Image_Viewer {
 
 	function enqueue_admin_scripts() {
 		wp_enqueue_script( 'rad-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/rad-image-viewer-admin.js', array(), $this->version, true );
+		wp_enqueue_style( 'rad-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/rad-image-viewer-admin.css', array(), $this->version );
 	}
 
 
@@ -380,15 +381,15 @@ class RAD_Image_Viewer {
 	}
 
 	function rad_shortcode_meta_box_callback( $post ) {
-		$post_id   = $post->ID;
-		$shortcode = "[rad_image id=$post_id]";
 
-		if ( ! $post_id ) {
-			$shortcode = 'Save post to generate shortcode';
+		if ( $post->post_name ) {
+			$shortcode = "[rad_image slug='$post->post_name']";
+		} else {
+			$shortcode = "[rad_image id='$post->ID']";
 		}
 
 		echo '<input type="text" id="rad_shortcode_field" value="' . $shortcode . '" readonly>';
-		echo '<button id="copy_rad_shortcode" style="border:0px; background-color:transparent;cursor:pointer"><span class="dashicons dashicons-clipboard"></span></button>';
+		echo '<button id="copy_rad_shortcode"><span class="dashicons dashicons-clipboard"></span></button>';
 	}
 
 	/**

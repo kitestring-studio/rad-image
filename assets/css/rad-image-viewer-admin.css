@@ -1,0 +1,23 @@
+/* rad-image post editor */
+
+/*// insert a css rule for the copied state where color=green*/
+/* shortcode metabox */
+
+#rad_shortcode_meta_box .inside {
+	display: flex;
+}
+
+#rad_shortcode_field {
+	flex: 1;
+}
+
+#copy_rad_shortcode {
+	flex: 0;
+	border: 0px;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+#copy_rad_shortcode.copied {
+	color: green;
+}
