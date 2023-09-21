@@ -8,13 +8,13 @@
  * Author URI:      https://kitestring.studio
  * Text Domain:     rad_image
  * Domain Path:     /languages
- * Version:         1.1.0
+ * Version:         1.2.0-beta
  * License:         GPL-2.0+
  *
  * @package         Image_Viewer
  */
 
-const RAD_VERSION  = '1.0.0';
+const RAD_VERSION  = '1.2.0-beta';
 const RAD_CPT_SLUG = 'rad_image'; // @TODO pass into constructor
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,4 +34,3 @@ add_action( 'plugins_loaded', function () {
 
 	new RAD_Image_Viewer( RAD_VERSION );
 }, 20 );
-
