@@ -27,7 +27,7 @@ function initKeyShotXR(rad_keyshot_config) {
 	const imageExtension = "jpg";
 	const showLoading = true;
 	const loadingIcon = "../../../../../plugins/rad-image/assets/img/Ball_and_arrow.webp"; // will need to calculate the number of parent levels in the path
-	const allowFullscreen = true; // Double-click in desktop browsers for fullscreen.
+	const allowFullscreen = false; // Double-click in desktop browsers for fullscreen.
 	const uReverse = false;
 	const vReverse = false;
 	const hotspots = {};

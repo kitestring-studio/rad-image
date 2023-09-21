@@ -12,6 +12,7 @@
 			captionsData: "description",
 			captionPosition: "outside",
 			heightRatio: .85,
+			doubleTapZoom: 1,
 			// fadeSpeed: 0, // disable caption fadein, but also disables slide animation
 		};
 
