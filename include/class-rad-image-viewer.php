@@ -63,7 +63,7 @@ class RAD_Image_Viewer {
 		$this->rs_image_id = $post_id;
 		$type              = get_field( 'type', $post_id );
 
-		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth' ) ) ) {
+		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth', 'single' ) ) ) {
 			return '';
 		}
 
@@ -121,6 +121,7 @@ class RAD_Image_Viewer {
 
 				break;
 			case 'gallery':
+			case 'single':
 				$fixsupport = false;
 
 				if ( ! current_theme_supports( 'html5', array( 'gallery' ) ) ) {
@@ -133,7 +134,11 @@ class RAD_Image_Viewer {
 				add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 
-				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+				$columns = ( $type === 'single' ) ? 1 : 2;
+				$size = ( $type === 'single' ) ? 'large' : 'medium';
+				$images =( $type === 'single' ) ? [$images[0]] : $images;
+
+				echo do_shortcode( "[gallery id=$post_id size=$size link=file columns=$columns ids='" . implode( ',', $images ) . "']" );
 
 				if ( $fixsupport ) {
 					remove_theme_support( 'html5' );
