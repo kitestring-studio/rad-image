@@ -208,5 +208,9 @@ div.ltblue-bkd.interiorhero {
 
 /* single image viewer */
 .rad-image__single .gallery-item {
-	max-width:85%;
+	max-width:75%;
+}
+
+.rad-image__single .gallery-item a {
+	width:auto;
 }
