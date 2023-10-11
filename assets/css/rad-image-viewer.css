@@ -54,6 +54,11 @@
 	padding: 3px 6px;
 }
 
+.sl-wrapper .sl-image .sl-caption.pos-outside {
+	display: block !important;
+	opacity: 1 !important;
+}
+
 div.ltblue-bkd.interiorhero {
 	/*display: none !important; !* For testing *!*/
 }
