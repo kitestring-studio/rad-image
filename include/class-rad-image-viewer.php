@@ -402,6 +402,7 @@ class RAD_Image_Viewer {
 	 */
 	protected function get_keyshot_config(): array {
 		$post_id            = $this->rs_image_id;
+		$start_frame        = (int) get_field( 'start_frame', $post_id );
 		$image_array        = get_field( 'images', $post_id );
 		$image_url          = wp_get_attachment_url( $image_array[0], 'full' );
 		$image_meta         = wp_get_attachment_metadata( $image_array[0], 'full' );
@@ -420,11 +421,10 @@ class RAD_Image_Viewer {
 			$vStartIndex = 0;
 			$uStartIndex = $y_count - 1; // @TODO should this be 0? Why are we starting from the end?
 		} elseif ( $type === 'depth' ) {
-			$vCount      = $x_count;
-			$uCount      = $y_count;
+			$vCount = $x_count;
+			$uCount = $y_count;
 
-			// @TODO testing here
-			$vStartIndex = (int) floor( $x_count / 2 );
+			$vStartIndex = $this->find_frame( $x_count, $start_frame );
 			$uStartIndex = 0;
 		} else {
 			// shouldn't be able to get here, fail silently
@@ -444,4 +444,16 @@ class RAD_Image_Viewer {
 			'imageHeight' => $image_meta['height'], // no longer used
 		);
 	}
+
+	private function find_frame( $total_frames, int $start_frame = 0 ): int {
+		if ( $start_frame == 1 ) {
+			return 0;
+		}
+		if ( $start_frame == 100 ) {
+			return $total_frames;
+		}
+
+		return floor( ( $start_frame / 100 ) * $total_frames );
+	}
+
 }
