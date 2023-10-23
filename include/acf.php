@@ -106,7 +106,7 @@ add_action( 'acf/include_fields', function () {
 			),
 			array(
 				'key'               => 'field_65354d29a6e22',
-				'label'             => 'Start Frame',
+				'label'             => 'Start Frame (For Depth Gallery Type)',
 				'name'              => 'start_frame',
 				'aria-label'        => '',
 				'type'              => 'radio',
