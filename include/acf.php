@@ -130,7 +130,7 @@ add_action( 'acf/include_fields', function () {
 					0  => 'First',
 					50 => 'Middle',
 				),
-				'default_value'     => '',
+				'default_value'     => 50,
 				'return_format'     => 'value',
 				'allow_null'        => 0,
 				'other_choice'      => 0,
@@ -331,5 +331,6 @@ add_action( 'acf/include_fields', function () {
 		'show_in_rest'          => 0,
 	) );
 } );
+
 
 

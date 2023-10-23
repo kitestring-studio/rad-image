@@ -445,7 +445,7 @@ class RAD_Image_Viewer {
 		);
 	}
 
-	private function find_frame( $total_frames, int $start_frame = 0 ): int {
+	private function find_frame( $total_frames, int $start_frame = 50 ): int {
 		if ( $start_frame == 1 ) {
 			return 0;
 		}
