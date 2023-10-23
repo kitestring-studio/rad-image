@@ -105,6 +105,39 @@ add_action( 'acf/include_fields', function () {
 				'new_lines'          => '',
 			),
 			array(
+				'key'               => 'field_65354d29a6e22',
+				'label'             => 'Start Frame',
+				'name'              => 'start_frame',
+				'aria-label'        => '',
+				'type'              => 'radio',
+				'instructions'      => '',
+				'required'          => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_63974fe0e18e1',
+							'operator' => '==',
+							'value'    => 'depth',
+						),
+					),
+				),
+				'wrapper'           => array(
+					'width' => '',
+					'class' => '',
+					'id'    => '',
+				),
+				'choices'           => array(
+					0  => 'First',
+					50 => 'Middle',
+				),
+				'default_value'     => '',
+				'return_format'     => 'value',
+				'allow_null'        => 0,
+				'other_choice'      => 0,
+				'layout'            => 'vertical',
+				'save_other_choice' => 0,
+			),
+			array(
 				'key'               => 'field_638c863653019',
 				'label'             => 'Images',
 				'name'              => 'images',
