@@ -16,6 +16,7 @@
 
 const RAD_VERSION  = '1.2.0-beta';
 const RAD_CPT_SLUG = 'rad_image'; // @TODO pass into constructor
+const RAD_PLUGIN_DIR = __DIR__;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

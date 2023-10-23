@@ -37,7 +37,7 @@ function rad_acf_json_load_point( $paths ) {
 	// remove original path (optional)
 	unset( $paths[0] );
 
-	$paths[] = plugin_dir_path( __FILE__ ) . 'data';
+	$paths[] = RAD_PLUGIN_DIR. '/data';
 
 	return $paths;
 }
@@ -47,7 +47,7 @@ add_filter( 'acf/settings/load_json', 'rad_acf_json_load_point' );
 
 function rad_acf_json_save_point( $path ) {
 
-	return plugin_dir_path( __FILE__ ) . 'data';
+	return RAD_PLUGIN_DIR . '/data';
 }
 
 add_filter( 'acf/settings/save_json', 'rad_acf_json_save_point' );
