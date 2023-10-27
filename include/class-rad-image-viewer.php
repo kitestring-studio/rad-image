@@ -117,7 +117,7 @@ class RAD_Image_Viewer {
 				$image_meta = wp_get_attachment_metadata( end( $images ), 'full' );
 				$alt        = get_post_meta( end( $images ), '_wp_attachment_image_alt', true );
 
-				include plugin_dir_path( __FILE__ ) . 'keyshot-template.php';
+				include plugin_dir_path( __FILE__ ) . 'keyshot-template.php'; //@TODO inline this template
 
 				break;
 			case 'gallery':
@@ -181,7 +181,6 @@ class RAD_Image_Viewer {
 			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
 
 			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
-//			wp_enqueue_script( 'simple-lightbox', 'https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.1/simple-lightbox.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
 
 			wp_enqueue_style( 'rad-gallery', $dist . '/simple-lightbox.css', array(), $this->version, 'all' );
@@ -225,7 +224,14 @@ class RAD_Image_Viewer {
 		return $attr;
 	}
 
-	// filter for gallery_style to add a class to the gallery
+
+	/**
+	 * filter for gallery_style to add a class to the gallery
+	 *
+	 * @param $style
+	 *
+	 * @return array|false|mixed|string|string[]
+	 */
 	public function gallery_style_func( $style ) {
 		// check for viewer post type
 		if ( isset( $this->rs_image_id ) && get_post_type( $this->rs_image_id ) !== $this->cpt_slug ) {
@@ -329,8 +335,14 @@ class RAD_Image_Viewer {
 		return $param;
 	}
 
-// prevent wordpress from creating alternate image resolutions for "rad_image" custom post type
-// @TODO add thumbnail size back in
+	/**
+	 * prevent wordpress from creating alternate image resolutions for "rad_image" custom post type
+	 * @param $sizes
+	 *
+	 * @return array|mixed
+	 *
+	 * @TODO add thumbnail size back in
+	 */
 	function remove_image_sizes( $sizes ) {
 		$post_id = (int) $_REQUEST['post_id'] ?? 0;
 
