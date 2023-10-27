@@ -19,6 +19,17 @@ Implements three types of image viewers for working with sets of images
 - image rotation
 
 == Changelog ==
+2.0.0
+* improves HTML support for captions
+* adds single-image viewer support
+* supports multiple viewers per page
+* choose start frame for depth viewer
+* embed viewer by slug instead of/in addition to id, for easier recognition
+* make viewer title an anchor link
+* click “view” to view viewer in post edit list
+* add a column for selected viewer type in post editor list
+* many design tweaks & fixes
+
 1.1.0
 * adds support for multiple galleries on a single page
 * slightly reduces max size of images in lightbox
