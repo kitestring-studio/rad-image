@@ -135,8 +135,8 @@ class RAD_Image_Viewer {
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 
 				$columns = ( $type === 'single' ) ? 1 : 2;
-				$size = ( $type === 'single' ) ? 'large' : 'medium';
-				$images =( $type === 'single' ) ? [$images[0]] : $images;
+				$size    = ( $type === 'single' ) ? 'large' : 'medium';
+				$images  = ( $type === 'single' ) ? [ $images[0] ] : $images;
 
 				echo do_shortcode( "[gallery id=$post_id size=$size link=file columns=$columns ids='" . implode( ',', $images ) . "']" );
 
@@ -176,7 +176,7 @@ class RAD_Image_Viewer {
 		// check environment = production, use assets/dist, otherwise use node_modules
 		$node_modules_installed = file_exists( dirname( plugin_dir_path( __FILE__ ) ) . '/node_modules/simplelightbox/dist' );
 
-		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) && $node_modules_installed) {
+		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) && $node_modules_installed ) {
 
 			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
 
@@ -202,9 +202,9 @@ class RAD_Image_Viewer {
 		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array( 'keyshotxr' ), $this->version, true );
 
 		$keyshot_config = $this->get_keyshot_config();
-		$id= $keyshot_config['id'];
+		$id             = $keyshot_config['id'];
 		wp_localize_script( "keyshot-init", "rad_keyshot_config_$id", $keyshot_config );
-		wp_add_inline_script("keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
+		wp_add_inline_script( "keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
 	}
 
 	/**
