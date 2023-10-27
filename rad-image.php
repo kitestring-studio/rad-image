@@ -14,8 +14,8 @@
  * @package         Image_Viewer
  */
 
-const RAD_VERSION  = '2.0.0';
-const RAD_CPT_SLUG = 'rad_image'; // @TODO pass into constructor
+const RAD_VERSION    = '2.0.0';
+const RAD_CPT_SLUG   = 'rad_image'; // @TODO pass into constructor
 const RAD_PLUGIN_DIR = __DIR__;
 
 if ( ! defined( 'ABSPATH' ) ) {

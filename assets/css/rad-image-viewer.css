@@ -188,22 +188,26 @@ div.ltblue-bkd.interiorhero {
 .rad-image__wrapper .KeyShotXR {
 	margin-bottom: 2rem;
 }
+
 .rad-image__wrapper .KeyShotXR img {
 	max-width: 100%;
 }
+
 .KeyShotXR #placeholder:not(:only-child) {
 	display: none;
 }
 
 /* constrain height to 75hv */
 .rad-image__rotation *,
-.rad-image__depth *{
+.rad-image__depth * {
 	max-height: 75vh;
 }
+
 .rad-image__rotation #turntable {
 	display: flex;
 	justify-content: center;
 }
+
 .rad-image__rotation #turntable > img#backbuffer,
 .rad-image__depth img#backbuffer {
 	width: auto !important;
@@ -213,9 +217,9 @@ div.ltblue-bkd.interiorhero {
 
 /* single image viewer */
 .rad-image__single .gallery-item {
-	max-width:75%;
+	max-width: 75%;
 }
 
 .rad-image__single .gallery-item a {
-	width:auto;
+	width: auto;
 }

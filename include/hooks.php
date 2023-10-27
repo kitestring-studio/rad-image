@@ -37,7 +37,7 @@ function rad_acf_json_load_point( $paths ) {
 	// remove original path (optional)
 	unset( $paths[0] );
 
-	$paths[] = RAD_PLUGIN_DIR. '/data';
+	$paths[] = RAD_PLUGIN_DIR . '/data';
 
 	return $paths;
 }
@@ -62,7 +62,7 @@ add_filter( 'acf/settings/save_json', 'rad_acf_json_save_point' );
  */
 function render_image_viewer_shortcode_in_content( $content ) {
 	global $post;
-	if ( current_user_can('manage_options') && is_singular( 'rad_image' ) ) {
+	if ( current_user_can( 'manage_options' ) && is_singular( 'rad_image' ) ) {
 		return do_shortcode( '[rad_image id=' . $post->ID . ']' );
 	}
 
@@ -78,11 +78,13 @@ add_filter( 'the_content', 'render_image_viewer_shortcode_in_content' );
  *
  * @return mixed
  */
-function add_type_column($columns) {
+function add_type_column( $columns ) {
 	$columns['type'] = 'Viewer Type';
+
 	return $columns;
 }
-add_filter('manage_rad_image_posts_columns', 'add_type_column');
+
+add_filter( 'manage_rad_image_posts_columns', 'add_type_column' );
 
 /**
  * Populates values in rad_image 'type' column
@@ -103,14 +105,16 @@ function populate_type_column_data( $column, $post_id ) {
 	}
 }
 
-add_action('manage_rad_image_posts_custom_column', 'populate_type_column_data', 10, 2);
+add_action( 'manage_rad_image_posts_custom_column', 'populate_type_column_data', 10, 2 );
 
 // add 'slug' column
-function add_slug_column($columns) {
+function add_slug_column( $columns ) {
 	$columns['slug'] = 'Slug';
+
 	return $columns;
 }
-add_filter('manage_rad_image_posts_columns', 'add_slug_column', 1);
+
+add_filter( 'manage_rad_image_posts_columns', 'add_slug_column', 1 );
 
 /**
  * Populates values in rad_image 'slug' column
@@ -131,4 +135,5 @@ function populate_slug_column_data( $column, $post_id ) {
 		}
 	}
 }
-add_action('manage_rad_image_posts_custom_column', 'populate_slug_column_data', 10, 2);
+
+add_action( 'manage_rad_image_posts_custom_column', 'populate_slug_column_data', 10, 2 );
