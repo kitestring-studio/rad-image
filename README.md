@@ -50,6 +50,9 @@ npm run build
 
 ## Changelog
 
+### 2.0.1
+- adds packaging script
+
 ### 2.0.0
 - Improves HTML support for captions
 - Adds single-image viewer support
