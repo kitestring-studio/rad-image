@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist",
-    "build": "rm -rf dist && webpack --mode=production"
+    "build": "rm -rf dist && webpack --mode=production",
+    "zip": "zip -r image-viewer.zip . -x '*.git*' '*.DS_Store*' 'node_modules/*' 'src/*' 'package-lock.json' 'package.json' 'webpack.config.js'"
   },
   "repository": {
     "type": "git",
