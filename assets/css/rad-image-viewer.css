@@ -54,6 +54,11 @@
 	padding: 3px 6px;
 }
 
+.sl-wrapper .sl-image .sl-caption.pos-outside {
+	display: block !important;
+	opacity: 1 !important;
+}
+
 div.ltblue-bkd.interiorhero {
 	/*display: none !important; !* For testing *!*/
 }
@@ -173,7 +178,44 @@ div.ltblue-bkd.interiorhero {
 
 .rad-image__set-caption {
 	padding: 5px 5% 25px 5%;
-	margin-bottom:25px;
+	margin-bottom: 25px;
 	font-style: italic;
 	font-size: .9em;
+}
+
+/* rotation/depth  viewer */
+
+.rad-image__wrapper .KeyShotXR {
+	margin-bottom: 2rem;
+}
+.rad-image__wrapper .KeyShotXR img {
+	max-width: 100%;
+}
+.KeyShotXR #placeholder:not(:only-child) {
+	display: none;
+}
+
+/* constrain height to 75hv */
+.rad-image__rotation *,
+.rad-image__depth *{
+	max-height: 75vh;
+}
+.rad-image__rotation #turntable {
+	display: flex;
+	justify-content: center;
+}
+.rad-image__rotation #turntable > img#backbuffer,
+.rad-image__depth img#backbuffer {
+	width: auto !important;
+	left: auto !important;
+}
+
+
+/* single image viewer */
+.rad-image__single .gallery-item {
+	max-width:75%;
+}
+
+.rad-image__single .gallery-item a {
+	width:auto;
 }

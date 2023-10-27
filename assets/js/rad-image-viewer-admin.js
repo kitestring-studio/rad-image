@@ -11,6 +11,19 @@ document.addEventListener("DOMContentLoaded", function() {
 		// document.execCommand("copy");
 		navigator.clipboard.writeText(rad_shortcode_field.value);
 
+		// display a visual confirmation
+		const copy_rad_shortcode = document.getElementById("copy_rad_shortcode");
+		const dashicon = copy_rad_shortcode.querySelector('.dashicons');
+		dashicon.classList.remove('dashicons-clipboard');
+		dashicon.classList.add('dashicons-yes-alt');
+
+		copy_rad_shortcode.classList.add('copied');
+		setTimeout(function () {
+			dashicon.classList.add('dashicons-clipboard');
+			dashicon.classList.remove('dashicons-yes-alt');
+			copy_rad_shortcode.classList.remove('copied');
+		}, 1000);
+
 	});
 
 	handleTypeChange(jQuery('input[name="acf[field_63974fe0e18e1]"]:checked'))

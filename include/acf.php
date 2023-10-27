@@ -1,5 +1,9 @@
 <?php
-if ( function_exists( 'acf_add_local_field_group' ) ):
+
+add_action( 'acf/include_fields', function () {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
 
 	acf_add_local_field_group( array(
 		'key'                   => 'group_638c84c216521',
@@ -23,6 +27,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ):
 					'gallery'  => 'Gallery',
 					'rotation' => 'Rotation',
 					'depth'    => 'Depth',
+					'single'   => 'Single',
 				),
 				'default_value'     => 'a',
 				'return_format'     => 'value',
@@ -52,30 +57,31 @@ if ( function_exists( 'acf_add_local_field_group' ) ):
 				'append'            => '',
 			),
 			array(
-				'key'               => 'field_638c85e653018',
-				'label'             => 'Display Set Title',
-				'name'              => 'display_set_title',
-				'aria-label'        => '',
-				'type'              => 'checkbox',
-				'instructions'      => '',
-				'required'          => 0,
-				'conditional_logic' => 0,
-				'wrapper'           => array(
+				'key'                       => 'field_638c85e653018',
+				'label'                     => 'Display Set Title',
+				'name'                      => 'display_set_title',
+				'aria-label'                => '',
+				'type'                      => 'checkbox',
+				'instructions'              => '',
+				'required'                  => 0,
+				'conditional_logic'         => 0,
+				'wrapper'                   => array(
 					'width' => '25',
 					'class' => '',
 					'id'    => '',
 				),
-				'choices'           => array(
+				'choices'                   => array(
 					'true' => 'Display on frontend',
 				),
-				'default_value'     => array(
+				'default_value'             => array(
 					0 => 'true',
 				),
-				'return_format'     => 'value',
-				'allow_custom'      => 0,
-				'layout'            => 'vertical',
-				'toggle'            => 0,
-				'save_custom'       => 0,
+				'return_format'             => 'value',
+				'allow_custom'              => 0,
+				'layout'                    => 'vertical',
+				'toggle'                    => 0,
+				'save_custom'               => 0,
+				'custom_choice_button_text' => 'Add new choice',
 			),
 			array(
 				'key'                => 'field_63bdeab575c28',
@@ -97,6 +103,39 @@ if ( function_exists( 'acf_add_local_field_group' ) ):
 				'rows'               => 3,
 				'placeholder'        => '',
 				'new_lines'          => '',
+			),
+			array(
+				'key'               => 'field_65354d29a6e22',
+				'label'             => 'Start Frame (For Depth Gallery Type)',
+				'name'              => 'start_frame',
+				'aria-label'        => '',
+				'type'              => 'radio',
+				'instructions'      => '',
+				'required'          => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_63974fe0e18e1',
+							'operator' => '==',
+							'value'    => 'depth',
+						),
+					),
+				),
+				'wrapper'           => array(
+					'width' => '',
+					'class' => '',
+					'id'    => '',
+				),
+				'choices'           => array(
+					0  => 'First',
+					50 => 'Middle',
+				),
+				'default_value'     => 50,
+				'return_format'     => 'value',
+				'allow_null'        => 0,
+				'other_choice'      => 0,
+				'layout'            => 'vertical',
+				'save_other_choice' => 0,
 			),
 			array(
 				'key'               => 'field_638c863653019',
@@ -291,5 +330,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ):
 		'description'           => '',
 		'show_in_rest'          => 0,
 	) );
+} );
 
-endif;
+
+

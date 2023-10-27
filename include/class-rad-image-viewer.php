@@ -7,6 +7,7 @@ class RAD_Image_Viewer {
 	private int $rs_image_id;
 	private int $max_width; //@TODO unused?
 	private float $aspect_ratio;
+	private static int $viewer_count = 0;
 
 	function __construct( $version ) {
 		$this->version    = $version;
@@ -36,23 +37,33 @@ class RAD_Image_Viewer {
 
 
 	public function rad_image_shortcode_func( $atts ) {
-		$atts = shortcode_atts(
-			array( 'id' => '', 'max_width' => '750' ),
+		self::$viewer_count += 1;
+		$viewer_count       = self::$viewer_count;
+		$atts               = shortcode_atts(
+			array( 'id' => '', 'slug' => '', 'max_width' => '750' ),
 			$atts,
 			'custom_post_type'
 		);
 
-		$this->max_width = (int) $atts['max_width'];
-		$post_id         = (int) $atts['id'];
+		// make sure one of $post_id or post_slug is set, and that the post exists. Populate $post.
+		if ( ! $atts['id'] && ! $atts['slug'] ) {
+			return 'Invalid slug or id for [rad_image]';
+		} elseif ( $atts['id'] ) {
+			$post = get_post( $atts['id'] );
+		} else {
+			$post = get_page_by_path( $atts['slug'], OBJECT, $this->cpt_slug );
+		}
 
+		$post_id = $post->ID;
 		if ( get_post_type( $post_id ) !== $this->cpt_slug ) {
 			return '';
 		}
 
+		$this->max_width   = (int) $atts['max_width'];
 		$this->rs_image_id = $post_id;
 		$type              = get_field( 'type', $post_id );
 
-		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth' ) ) ) {
+		if ( ! in_array( $type, array( 'gallery', 'rotation', 'depth', 'single' ) ) ) {
 			return '';
 		}
 
@@ -61,6 +72,24 @@ class RAD_Image_Viewer {
 		if ( ! $images ) {
 			return '';
 		}
+
+		// bold, italics, other formatting, and links are allowed in the caption
+		$allowed_html = array(
+			'a'      => array(
+				'href'           => array(),
+				'referrerpolicy' => array(),
+				'title'          => array(),
+				'target'         => array( '_blank', '_self', '_parent', '_top' ),
+			),
+			'b'      => array(),
+			'i'      => array(),
+			'em'     => array(),
+			'strong' => array(),
+			'span'   => array(),
+			'div'    => array(),
+			'br'     => array(),
+			'p'      => array(),
+		);
 
 		$show_title = get_field( 'display_set_title', $post_id );
 		$caption    = get_field( 'image_set_caption', $post_id );
@@ -73,9 +102,9 @@ class RAD_Image_Viewer {
 
 		ob_start();
 
-		echo "<div class='rad-image__wrapper'>";
+		echo "<div class='rad-image__wrapper rad-image__wrapper-$viewer_count rad-image__$type'>";
 
-		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text );
+		$this->title_and_tooltip( $post_id, $show_title, $tooltip_text, $viewer_count );
 
 		$twoD = array();
 		switch ( $type ) { // a = depth, b= rotation, c = gallery
@@ -92,6 +121,7 @@ class RAD_Image_Viewer {
 
 				break;
 			case 'gallery':
+			case 'single':
 				$fixsupport = false;
 
 				if ( ! current_theme_supports( 'html5', array( 'gallery' ) ) ) {
@@ -104,7 +134,11 @@ class RAD_Image_Viewer {
 				add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
 
-				echo do_shortcode( "[gallery id=$post_id size=medium link=file columns=2 ids='" . implode( ',', $images ) . "']" ); // @TODO test this!
+				$columns = ( $type === 'single' ) ? 1 : 2;
+				$size = ( $type === 'single' ) ? 'large' : 'medium';
+				$images =( $type === 'single' ) ? [$images[0]] : $images;
+
+				echo do_shortcode( "[gallery id=$post_id size=$size link=file columns=$columns ids='" . implode( ',', $images ) . "']" );
 
 				if ( $fixsupport ) {
 					remove_theme_support( 'html5' );
@@ -112,7 +146,7 @@ class RAD_Image_Viewer {
 				break;
 		}
 		if ( $caption ) {
-			echo '<p class="rad-image__set-caption">' . esc_html( $caption ) . '</p>';
+			echo '<p class="rad-image__set-caption">' . wp_kses( $caption, $allowed_html ) . '</p>';
 		}
 
 		echo '</div>'; // end rad-image__wrapper
@@ -120,13 +154,14 @@ class RAD_Image_Viewer {
 		return ob_get_clean();
 	}
 
-	protected function title_and_tooltip( $post_id, $show_title, $tooltip ) {
+	protected function title_and_tooltip( $post_id, $show_title, $tooltip, $viewer_count ) {
 		?>
 		<div class="tooltip-wrapper">
-			<div class="title_container"><?php
+			<div id="image-viewer__title-<?php echo $viewer_count; ?>" class="title_container image-viewer__title">
+				<?php
 				if ( $show_title ) {
 					$image_set_title = get_field( 'image_set_title', $post_id );
-					echo '<h3 class="rad-image__title">' . esc_html( $image_set_title ) . '</h3>';
+					echo "<h3 class='rad-image__title'><a href='#image-viewer__title-$viewer_count' >" . esc_html( $image_set_title ) . "</a></h3>";
 				}
 
 				?></div>
@@ -168,7 +203,9 @@ class RAD_Image_Viewer {
 		wp_enqueue_script( 'keyshot-init', $this->plugin_url . '/assets/js/keyshot_init.js', array( 'keyshotxr' ), $this->version, true );
 
 		$keyshot_config = $this->get_keyshot_config();
-		wp_localize_script( 'keyshot-init', 'rad_keyshot_config', $keyshot_config );
+		$id= $keyshot_config['id'];
+		wp_localize_script( "keyshot-init", "rad_keyshot_config_$id", $keyshot_config );
+		wp_add_inline_script("keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
 	}
 
 	/**
@@ -333,6 +370,7 @@ class RAD_Image_Viewer {
 
 	function enqueue_admin_scripts() {
 		wp_enqueue_script( 'rad-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/rad-image-viewer-admin.js', array(), $this->version, true );
+		wp_enqueue_style( 'rad-viewer-admin', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/css/rad-image-viewer-admin.css', array(), $this->version );
 	}
 
 
@@ -348,15 +386,15 @@ class RAD_Image_Viewer {
 	}
 
 	function rad_shortcode_meta_box_callback( $post ) {
-		$post_id   = $post->ID;
-		$shortcode = "[rad_image id=$post_id]";
 
-		if ( ! $post_id ) {
-			$shortcode = 'Save post to generate shortcode';
+		if ( $post->post_name ) {
+			$shortcode = "[rad_image slug='$post->post_name']";
+		} else {
+			$shortcode = "[rad_image id='$post->ID']";
 		}
 
 		echo '<input type="text" id="rad_shortcode_field" value="' . $shortcode . '" readonly>';
-		echo '<button id="copy_rad_shortcode" style="border:0px; background-color:transparent;cursor:pointer"><span class="dashicons dashicons-clipboard"></span></button>';
+		echo '<button id="copy_rad_shortcode"><span class="dashicons dashicons-clipboard"></span></button>';
 	}
 
 	/**
@@ -364,6 +402,7 @@ class RAD_Image_Viewer {
 	 */
 	protected function get_keyshot_config(): array {
 		$post_id            = $this->rs_image_id;
+		$start_frame        = (int) get_field( 'start_frame', $post_id );
 		$image_array        = get_field( 'images', $post_id );
 		$image_url          = wp_get_attachment_url( $image_array[0], 'full' );
 		$image_meta         = wp_get_attachment_metadata( $image_array[0], 'full' );
@@ -382,9 +421,10 @@ class RAD_Image_Viewer {
 			$vStartIndex = 0;
 			$uStartIndex = $y_count - 1; // @TODO should this be 0? Why are we starting from the end?
 		} elseif ( $type === 'depth' ) {
-			$vCount      = $x_count;
-			$uCount      = $y_count;
-			$vStartIndex = $x_count - 1; // @TODO should this be 0? Why are we starting from the end?
+			$vCount = $x_count;
+			$uCount = $y_count;
+
+			$vStartIndex = $this->find_frame( $x_count, $start_frame );
 			$uStartIndex = 0;
 		} else {
 			// shouldn't be able to get here, fail silently
@@ -392,6 +432,8 @@ class RAD_Image_Viewer {
 		}
 
 		return array(
+//			'id'          => $post_id,
+			'id'          => self::$viewer_count,
 			'vCount'      => $vCount,
 			'uCount'      => $uCount,
 			'vStartIndex' => $vStartIndex,
@@ -402,4 +444,16 @@ class RAD_Image_Viewer {
 			'imageHeight' => $image_meta['height'], // no longer used
 		);
 	}
+
+	private function find_frame( $total_frames, int $start_frame = 50 ): int {
+		if ( $start_frame == 1 ) {
+			return 0;
+		}
+		if ( $start_frame == 100 ) {
+			return $total_frames;
+		}
+
+		return floor( ( $start_frame / 100 ) * $total_frames );
+	}
+
 }
