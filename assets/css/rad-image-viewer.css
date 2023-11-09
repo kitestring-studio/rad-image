@@ -208,12 +208,6 @@ div.ltblue-bkd.interiorhero {
 	justify-content: center;
 }
 
-.rad-image__rotation #turntable > img#backbuffer,
-.rad-image__depth img#backbuffer {
-	width: auto !important;
-	left: auto !important;
-}
-
 
 /* single image viewer */
 .rad-image__single .gallery-item {
