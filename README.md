@@ -49,6 +49,9 @@ npm run build
 ```
 
 ## Changelog
+### 2.0.2
+- fix gap around viewer on larger screens
+- fix missing tooltip on single viewer
 
 ### 2.0.1
 - adds packaging script
