@@ -219,6 +219,39 @@ add_action( 'acf/include_fields', function () {
 				'new_lines'         => '',
 			),
 			array(
+				'key'               => 'field_654d249a4ba6d',
+				'label'             => 'Help Text',
+				'name'              => 'help_text_single',
+				'aria-label'        => '',
+				'type'              => 'textarea',
+				'instructions'      => '',
+				'required'          => 0,
+				'conditional_logic' => array(
+					array(
+						array(
+							'field'    => 'field_63974fe0e18e1',
+							'operator' => '==',
+							'value'    => 'gallery',
+						),
+						array(
+							'field'    => 'field_640f3e255cdc7',
+							'operator' => '==',
+							'value'    => '1',
+						),
+					),
+				),
+				'wrapper'           => array(
+					'width' => '85',
+					'class' => '',
+					'id'    => '',
+				),
+				'default_value'     => 'Click on the image thumbnail to access the full image and see image-specific details.',
+				'maxlength'         => '',
+				'rows'              => 3,
+				'placeholder'       => '',
+				'new_lines'         => '',
+			),
+			array(
 				'key'               => 'field_640f3dc639684',
 				'label'             => 'Help Text',
 				'name'              => 'help_text_rotation',
@@ -329,8 +362,9 @@ add_action( 'acf/include_fields', function () {
 		'active'                => true,
 		'description'           => '',
 		'show_in_rest'          => 0,
+		'modified'              => 1699554510,
 	) );
-} );
+} );;
 
 
 
