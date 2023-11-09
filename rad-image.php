@@ -29,7 +29,7 @@ add_action( 'plugins_loaded', function () {
 	}
 
 	require_once plugin_dir_path( __FILE__ ) . 'include/cpt.php';
-//	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
+	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
 	require_once plugin_dir_path( __FILE__ ) . 'include/class-rad-image-viewer.php';
 
 	new RAD_Image_Viewer( RAD_VERSION );
