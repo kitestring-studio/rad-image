@@ -49,6 +49,9 @@ npm run build
 ```
 
 ## Changelog
+### 2.0.3
+- fix forced width for rotation and depth types
+
 ### 2.0.2
 - fix gap around viewer on larger screens
 - fix missing tooltip on single viewer

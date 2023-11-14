@@ -8,7 +8,7 @@
  * Author URI:      https://kitestring.studio
  * Text Domain:     rad_image
  * Domain Path:     /languages
- * Version:         2.0.2
+ * Version:         2.0.3b3
  * License:         GPL-2.0+
  *
  * @package         Image_Viewer

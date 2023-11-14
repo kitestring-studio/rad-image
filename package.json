@@ -1,6 +1,6 @@
 {
   "name": "rad-image",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "Kitestring Studio",
   "license": "GPL-2.0-or-later",
   "description": "=== Image Viewer ===\r Contributors: Gabe462\r Donate link: https://example.com/\r Tags: comments, spam\r Requires at least: 6.1\r Tested up to: 6.1.1\r Requires PHP: 7.4\r Stable tag: 0.1.0\r License: GPLv2 or later\r License URI: https://www.gnu.org/licenses/gpl-2.0.html",
