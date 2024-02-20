@@ -49,6 +49,10 @@ npm run build
 ```
 
 ## Changelog
+### 2.0.4
+- allows full HTML in captions & tooltips
+- fixes single viewer help section
+
 ### 2.0.3
 - fix forced width for rotation and depth types
 
