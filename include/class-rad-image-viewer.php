@@ -73,24 +73,6 @@ class RAD_Image_Viewer {
 			return '';
 		}
 
-		// bold, italics, other formatting, and links are allowed in the caption
-		$allowed_html = array(
-			'a'      => array(
-				'href'           => array(),
-				'referrerpolicy' => array(),
-				'title'          => array(),
-				'target'         => array( '_blank', '_self', '_parent', '_top' ),
-			),
-			'b'      => array(),
-			'i'      => array(),
-			'em'     => array(),
-			'strong' => array(),
-			'span'   => array(),
-			'div'    => array(),
-			'br'     => array(),
-			'p'      => array(),
-		);
-
 		$show_title = get_field( 'display_set_title', $post_id );
 		$caption    = get_field( 'image_set_caption', $post_id );
 
@@ -146,7 +128,7 @@ class RAD_Image_Viewer {
 				break;
 		}
 		if ( $caption ) {
-			echo '<p class="rad-image__set-caption">' . wp_kses( $caption, $allowed_html ) . '</p>';
+			echo '<p class="rad-image__set-caption">' . wp_kses_post( $caption ) . '</p>';
 		}
 
 		echo '</div>'; // end rad-image__wrapper

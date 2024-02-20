@@ -231,7 +231,7 @@ add_action( 'acf/include_fields', function () {
 						array(
 							'field'    => 'field_63974fe0e18e1',
 							'operator' => '==',
-							'value'    => 'gallery',
+							'value'    => 'single',
 						),
 						array(
 							'field'    => 'field_640f3e255cdc7',
@@ -362,9 +362,5 @@ add_action( 'acf/include_fields', function () {
 		'active'                => true,
 		'description'           => '',
 		'show_in_rest'          => 0,
-		'modified'              => 1699554510,
 	) );
-} );;
-
-
-
+} );;;

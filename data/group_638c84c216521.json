@@ -224,7 +224,7 @@
                     {
                         "field": "field_63974fe0e18e1",
                         "operator": "==",
-                        "value": "gallery"
+                        "value": "single"
                     },
                     {
                         "field": "field_640f3e255cdc7",
@@ -355,5 +355,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1699558433
+    "modified": 1706129862
 }
