@@ -47,11 +47,16 @@ After making plugin code changes, you need to build the assets by running the fo
 ```bash
 npm run build
 ```
+Crete a zip file
+```bash
+npm run zip
+```
 
 ## Changelog
 ### 2.0.4
 - allows full HTML in captions & tooltips
 - fixes single viewer help section
+- fixes npm zip script to continue if the zip file doesn't exist
 
 ### 2.0.3
 - fix forced width for rotation and depth types
