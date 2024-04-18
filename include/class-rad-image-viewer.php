@@ -162,8 +162,15 @@ class RAD_Image_Viewer {
 
 			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
 
-			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
+//			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
+
+			// enqueue script https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js
+			wp_enqueue_script( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
+			wp_enqueue_style( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
+
+
+
 
 			wp_enqueue_style( 'rad-gallery', $dist . '/simple-lightbox.css', array(), $this->version, 'all' );
 		} else {
@@ -188,6 +195,7 @@ class RAD_Image_Viewer {
 		wp_localize_script( "keyshot-init", "rad_keyshot_config_$id", $keyshot_config );
 		wp_add_inline_script( "keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
 	}
+
 
 	/**
 	 * This function filters wp_get_attachment_image_attributes to add the caption and description
@@ -451,3 +459,4 @@ class RAD_Image_Viewer {
 	}
 
 }
+
