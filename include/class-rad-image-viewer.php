@@ -113,10 +113,14 @@ class RAD_Image_Viewer {
 
 				$this->enqueue_gallery_assets();
 
+				// @TODO where do I get the individual gallery item caption?
+
 				add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
+				add_filter( 'wp_get_attachment_link', array( $this, 'customize_gallery_output' ), 10, 6 );
 
-				$columns = ( $type === 'single' ) ? 1 : 2;
+
+			$columns = ( $type === 'single' ) ? 1 : 2;
 				$size    = ( $type === 'single' ) ? 'large' : 'medium';
 				$images  = ( $type === 'single' ) ? [ $images[0] ] : $images;
 
@@ -165,7 +169,6 @@ class RAD_Image_Viewer {
 //			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
 
-			// enqueue script https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js
 			wp_enqueue_script( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
 			wp_enqueue_style( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
 
@@ -208,10 +211,24 @@ class RAD_Image_Viewer {
 	 * @return array
 	 */
 	function set_attachment_captions( array $attr, WP_Post $attachment, $size ): array {
+		$this->attachment = ["$attachment->ID" => $attachment];
 		$attr['data-description'] = $attachment->post_content;
 		$attr['data-caption']     = $attachment->post_excerpt;
 
 		return $attr;
+	}
+
+	function customize_gallery_output($link, $id, $size, $permalink, $icon, $text) {
+		if (!$permalink) {
+			$gallery_id = get_post_field('post_parent', $id); // Get the gallery ID
+			$fancybox_instance = "gallery-" . $gallery_id; // Create a unique Fancybox instance
+			$link = str_replace('<a href', '<a data-fancybox="'.$fancybox_instance.'" data-src', $link);
+//			$attachment = get_post($id);
+			$caption = $this->attachment["$id"]->post_content;
+			$description = $this->attachment["$id"]->post_excerpt;
+			$link = str_replace('<a ', '<a data-caption="' . esc_attr($caption) . '" data-description="' . esc_attr($description) . '"', $link);
+		}
+		return $link;
 	}
 
 

@@ -32,21 +32,12 @@ add_action( 'plugins_loaded', function () {
 	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
 	require_once plugin_dir_path( __FILE__ ) . 'include/class-rad-image-viewer.php';
 
-//	add_filter('wp_get_attachment_link', 'customize_gallery_output', 10, 6);
 	add_action('wp_enqueue_scripts', 'enqueue_fancybox_script' );
 
 	new RAD_Image_Viewer( RAD_VERSION );
 }, 20 );
 
-	function customize_gallery_output($link, $id, $size, $permalink, $icon, $text) {
-		if (!$permalink) {
-			$link = str_replace('<a href', '<a data-fancybox="gallery" data-src', $link);
-			$attachment = get_post($id);
-			$caption = $attachment->post_excerpt;
-			$link = str_replace('<a ', '<a data-caption="' . esc_attr($caption) . '" ', $link);
-		}
-		return $link;
-	}
+
 
 function enqueue_fancybox_script() {
 	$a=1;
