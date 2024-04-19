@@ -169,8 +169,8 @@ class RAD_Image_Viewer {
 //			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
 			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
 
-			wp_enqueue_script( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
-			wp_enqueue_style( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
+			wp_enqueue_script( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
+			wp_enqueue_style( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
 
 
 
@@ -179,9 +179,11 @@ class RAD_Image_Viewer {
 		} else {
 			$dist = $this->plugin_url . '/dist';
 
-			wp_enqueue_script( 'rad-gallery', $dist . '/gallery.bundle.js', array( 'jquery' ), $this->version, true );
+//			wp_enqueue_script( 'rad-gallery', $dist . '/gallery.bundle.js', array( 'jquery' ), $this->version, true );
 
-			wp_enqueue_style( 'rad-gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
+//			wp_enqueue_style( 'rad-gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
+			wp_enqueue_script( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
+			wp_enqueue_style( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
 		}
 
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
