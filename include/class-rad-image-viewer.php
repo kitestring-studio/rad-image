@@ -5,7 +5,6 @@ class RAD_Image_Viewer {
 	private string $version;
 	private string $plugin_url;
 	private int $rs_image_id;
-	private int $max_width; //@TODO unused?
 	private float $aspect_ratio;
 	private static int $viewer_count = 0;
 
@@ -40,7 +39,7 @@ class RAD_Image_Viewer {
 		self::$viewer_count += 1;
 		$viewer_count       = self::$viewer_count;
 		$atts               = shortcode_atts(
-			array( 'id' => '', 'slug' => '', 'max_width' => '750' ),
+			array( 'id' => '', 'slug' => '' ),
 			$atts,
 			'custom_post_type'
 		);
@@ -59,7 +58,6 @@ class RAD_Image_Viewer {
 			return '';
 		}
 
-		$this->max_width   = (int) $atts['max_width'];
 		$this->rs_image_id = $post_id;
 		$type              = get_field( 'type', $post_id );
 
@@ -120,7 +118,7 @@ class RAD_Image_Viewer {
 				add_filter( 'wp_get_attachment_link', array( $this, 'customize_gallery_output' ), 10, 6 );
 
 
-			$columns = ( $type === 'single' ) ? 1 : 2;
+				$columns = ( $type === 'single' ) ? 1 : 2;
 				$size    = ( $type === 'single' ) ? 'large' : 'medium';
 				$images  = ( $type === 'single' ) ? [ $images[0] ] : $images;
 
@@ -309,10 +307,12 @@ class RAD_Image_Viewer {
 
 
 	public function wp_custom_upload_dir( $param ) {
+		$matched_acf_field_id       = 'field_638c863653019'; // @TODO remove hardcoded field key?
+
 		// Check if this is a rad_image post and if the images field is being used
 		$post_id   = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
 		$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
-		if ( $this->cpt_slug !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
+		if ( $this->cpt_slug !== get_post_type( $post_id ) || $matched_acf_field_id !== $field_key ) {
 			return $param;
 		}
 
@@ -460,4 +460,3 @@ class RAD_Image_Viewer {
 	}
 
 }
-
