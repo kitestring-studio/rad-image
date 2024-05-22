@@ -32,24 +32,5 @@ add_action( 'plugins_loaded', function () {
 	require_once plugin_dir_path( __FILE__ ) . 'include/acf.php';
 	require_once plugin_dir_path( __FILE__ ) . 'include/class-rad-image-viewer.php';
 
-	add_action('wp_enqueue_scripts', 'enqueue_fancybox_script' );
-
 	new RAD_Image_Viewer( RAD_VERSION );
 }, 20 );
-
-
-
-function enqueue_fancybox_script() {
-	$a=1;
-	?>
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-			console.log("fancybox")
-			Fancybox.bind('[data-fancybox]', {
-				compact: false
-			});
-		});
-	</script>
-	<?php
-}
-

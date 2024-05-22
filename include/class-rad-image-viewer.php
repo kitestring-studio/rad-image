@@ -162,6 +162,13 @@ class RAD_Image_Viewer {
 		wp_enqueue_script( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
 		wp_enqueue_style( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
+
+		$inline_script = "document.addEventListener('DOMContentLoaded', function () {
+			Fancybox.bind('[data-fancybox]', {
+				compact: false
+			});
+		});";
+		wp_add_inline_script( 'fancybox', $inline_script );
 	}
 
 	public function enqueue_viewer_assets() {
