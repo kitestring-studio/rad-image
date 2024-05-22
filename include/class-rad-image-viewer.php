@@ -159,33 +159,8 @@ class RAD_Image_Viewer {
 	}
 
 	public function enqueue_gallery_assets() {
-		// check environment = production, use assets/dist, otherwise use node_modules
-		$node_modules_installed = file_exists( dirname( plugin_dir_path( __FILE__ ) ) . '/node_modules/simplelightbox/dist' );
-
-		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) && $node_modules_installed ) {
-
-			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
-
-//			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
-
-			wp_enqueue_script( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
-			wp_enqueue_style( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
-
-
-
-
-			wp_enqueue_style( 'rad-gallery', $dist . '/simple-lightbox.css', array(), $this->version, 'all' );
-		} else {
-			$dist = $this->plugin_url . '/dist';
-
-//			wp_enqueue_script( 'rad-gallery', $dist . '/gallery.bundle.js', array( 'jquery' ), $this->version, true );
-
-//			wp_enqueue_style( 'rad-gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
-			wp_enqueue_script( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
-			wp_enqueue_style( 'fancyboxx', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
-		}
-
+		wp_enqueue_script( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
+		wp_enqueue_style( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
 	}
 
@@ -204,7 +179,7 @@ class RAD_Image_Viewer {
 
 	/**
 	 * This function filters wp_get_attachment_image_attributes to add the caption and description
-	 * to the image data attributes for use by simplelightbox
+	 * to the image data attributes for use by fancybox
 	 *
 	 * @param array $attr
 	 * @param WP_Post $attachment
