@@ -1,5 +1,5 @@
 # Image Viewer WordPress Plugin
-![WordPress Version](https://img.shields.io/badge/WordPress-6.3.2-blue)
+![WordPress Version](https://img.shields.io/badge/WordPress-6.5.2-blue)
 ![PHP Version](https://img.shields.io/badge/PHP-7.4-red)
 ![License](https://img.shields.io/badge/License-GPLv2-green)
 
@@ -53,6 +53,9 @@ npm run zip
 ```
 
 ## Changelog
+### 2.1.0
+- switches simplelight to fancybox
+
 ### 2.0.4
 - allows full HTML in captions & tooltips
 - fixes single viewer help section
