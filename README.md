@@ -55,6 +55,7 @@ npm run zip
 ## Changelog
 ### 2.1.0
 - switches simplelight to fancybox
+- removes asset bundle in favor of fancybox via cdn
 
 ### 2.0.4
 - allows full HTML in captions & tooltips
