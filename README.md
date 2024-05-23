@@ -53,6 +53,9 @@ npm run zip
 ```
 
 ## Changelog
+### 2.1.1
+- fix a broken hardcoded image path
+
 ### 2.1.0
 - switches simplelight to fancybox
 - removes asset bundle in favor of fancybox via cdn
