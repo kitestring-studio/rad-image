@@ -5,7 +5,6 @@ class RAD_Image_Viewer {
 	private string $version;
 	private string $plugin_url;
 	private int $rs_image_id;
-	private int $max_width; //@TODO unused?
 	private float $aspect_ratio;
 	private static int $viewer_count = 0;
 
@@ -40,7 +39,7 @@ class RAD_Image_Viewer {
 		self::$viewer_count += 1;
 		$viewer_count       = self::$viewer_count;
 		$atts               = shortcode_atts(
-			array( 'id' => '', 'slug' => '', 'max_width' => '750' ),
+			array( 'id' => '', 'slug' => '' ),
 			$atts,
 			'custom_post_type'
 		);
@@ -59,7 +58,6 @@ class RAD_Image_Viewer {
 			return '';
 		}
 
-		$this->max_width   = (int) $atts['max_width'];
 		$this->rs_image_id = $post_id;
 		$type              = get_field( 'type', $post_id );
 
@@ -113,8 +111,12 @@ class RAD_Image_Viewer {
 
 				$this->enqueue_gallery_assets();
 
+				// @TODO where do I get the individual gallery item caption?
+
 				add_filter( 'gallery_style', array( $this, 'gallery_style_func' ), 10, 1 );
 				add_filter( 'wp_get_attachment_image_attributes', array( $this, 'set_attachment_captions' ), 10, 3 );
+				add_filter( 'wp_get_attachment_link', array( $this, 'customize_gallery_output' ), 10, 6 );
+
 
 				$columns = ( $type === 'single' ) ? 1 : 2;
 				$size    = ( $type === 'single' ) ? 'large' : 'medium';
@@ -155,26 +157,16 @@ class RAD_Image_Viewer {
 	}
 
 	public function enqueue_gallery_assets() {
-		// check environment = production, use assets/dist, otherwise use node_modules
-		$node_modules_installed = file_exists( dirname( plugin_dir_path( __FILE__ ) ) . '/node_modules/simplelightbox/dist' );
-
-		if ( in_array( wp_get_environment_type(), [ 'local', 'development' ] ) && $node_modules_installed ) {
-
-			$dist = dirname( plugin_dir_url( __FILE__ ) ) . '/node_modules/simplelightbox/dist';
-
-			wp_enqueue_script( 'simple-lightbox', $dist . '/simple-lightbox.js', array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( 'simplelightbox-config', dirname( plugin_dir_url( __FILE__ ) ) . '/assets/js/simplelightbox-config.js', array( 'simple-lightbox' ), $this->version, true );
-
-			wp_enqueue_style( 'rad-gallery', $dist . '/simple-lightbox.css', array(), $this->version, 'all' );
-		} else {
-			$dist = $this->plugin_url . '/dist';
-
-			wp_enqueue_script( 'rad-gallery', $dist . '/gallery.bundle.js', array( 'jquery' ), $this->version, true );
-
-			wp_enqueue_style( 'rad-gallery', $dist . '/gallery.bundle.css', array(), $this->version, 'all' );
-		}
-
+		wp_enqueue_script( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js', array(), $this->version, true );
+		wp_enqueue_style( 'fancybox', 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css', array(), $this->version );
 		wp_enqueue_style( 'rad-image-viewer', $this->plugin_url . '/assets/css/rad-image-viewer.css', array( 'dashicons' ), $this->version, 'all' );
+
+		$inline_script = "document.addEventListener('DOMContentLoaded', function () {
+			Fancybox.bind('[data-fancybox]', {
+				compact: false
+			});
+		});";
+		wp_add_inline_script( 'fancybox', $inline_script );
 	}
 
 	public function enqueue_viewer_assets() {
@@ -189,9 +181,10 @@ class RAD_Image_Viewer {
 		wp_add_inline_script( "keyshot-init", "window.addEventListener( 'load', function() { initKeyShotXR( rad_keyshot_config_$id ); })" );
 	}
 
+
 	/**
 	 * This function filters wp_get_attachment_image_attributes to add the caption and description
-	 * to the image data attributes for use by simplelightbox
+	 * to the image data attributes for use by fancybox
 	 *
 	 * @param array $attr
 	 * @param WP_Post $attachment
@@ -200,10 +193,24 @@ class RAD_Image_Viewer {
 	 * @return array
 	 */
 	function set_attachment_captions( array $attr, WP_Post $attachment, $size ): array {
+		$this->attachment = ["$attachment->ID" => $attachment];
 		$attr['data-description'] = $attachment->post_content;
 		$attr['data-caption']     = $attachment->post_excerpt;
 
 		return $attr;
+	}
+
+	function customize_gallery_output($link, $id, $size, $permalink, $icon, $text) {
+		if (!$permalink) {
+			$gallery_id = get_post_field('post_parent', $id); // Get the gallery ID
+			$fancybox_instance = "gallery-" . $gallery_id; // Create a unique Fancybox instance
+			$link = str_replace('<a href', '<a data-fancybox="'.$fancybox_instance.'" data-src', $link);
+//			$attachment = get_post($id);
+			$caption = $this->attachment["$id"]->post_content;
+			$description = $this->attachment["$id"]->post_excerpt;
+			$link = str_replace('<a ', '<a data-caption="' . esc_attr($caption) . '" data-description="' . esc_attr($description) . '"', $link);
+		}
+		return $link;
 	}
 
 
@@ -300,10 +307,12 @@ class RAD_Image_Viewer {
 
 
 	public function wp_custom_upload_dir( $param ) {
+		$matched_acf_field_id       = 'field_638c863653019'; // @TODO remove hardcoded field key?
+
 		// Check if this is a rad_image post and if the images field is being used
 		$post_id   = isset( $_POST['post_id'] ) ? intval( $_POST['post_id'] ) : 0;
 		$field_key = isset( $_POST['_acfuploader'] ) ? sanitize_text_field( $_POST['_acfuploader'] ) : '';
-		if ( $this->cpt_slug !== get_post_type( $post_id ) || 'field_638c863653019' !== $field_key ) { // @TODO remove hardcoded field key
+		if ( $this->cpt_slug !== get_post_type( $post_id ) || $matched_acf_field_id !== $field_key ) {
 			return $param;
 		}
 
