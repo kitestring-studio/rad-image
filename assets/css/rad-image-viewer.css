@@ -110,33 +110,15 @@ div.ltblue-bkd.interiorhero {
 	text-align: center;
 	padding: 5px;
 	border-radius: 6px;
-	z-index: 1;
+	z-index: 1000;
 	opacity: 0;
-	transition: opacity 0.3s;
+	/*transition: opacity 0.3s;*/
 }
 
 .tooltip:hover .tooltiptext {
 	visibility: visible;
 	opacity: 1;
 }
-
-.tooltip-right {
-	top: -5px;
-	left: 125%;
-}
-
-.tooltip-bottom {
-	top: 135%;
-	left: 50%;
-	margin-left: -60px;
-}
-
-.tooltip-top {
-	bottom: 125%;
-	left: 50%;
-	margin-left: -60px;
-}
-
 
 .tooltip-left {
 	top: -25px;
