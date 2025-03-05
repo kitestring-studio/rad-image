@@ -62,11 +62,12 @@ add_filter( 'acf/settings/save_json', 'rad_acf_json_save_point' );
  */
 function render_image_viewer_shortcode_in_content( $content ) {
 	global $post;
-	if ( current_user_can( 'manage_options' ) && is_singular( 'rad_image' ) ) {
-		return do_shortcode( '[rad_image id=' . $post->ID . ']' );
+	if ( doing_filter( 'get_the_excerpt' ) || ! is_singular( 'rad_image' ) /* || ! current_user_can( 'manage_options' ) &&*/ ) {
+		return $content;
 	}
 
-	return $content;
+	return do_shortcode( '[rad_image id=' . $post->ID . ']' );
+
 }
 
 add_filter( 'the_content', 'render_image_viewer_shortcode_in_content' );
