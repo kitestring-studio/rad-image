@@ -12,12 +12,14 @@ function cptui_register_rad_image() {
 		"menu_name"     => esc_html__( "Image Viewer", "custom-post-type-ui" ),
 	];
 
+	$is_privileged_user = current_user_can( 'edit_others_posts' );
+
 	$args = [
 		"label"                 => esc_html__( "Image Viewers", "custom-post-type-ui" ),
 		"labels"                => $labels,
 		"description"           => "",
-		"public"                => true,
-		"publicly_queryable"    => true,
+		"public"                => $is_privileged_user,
+		"publicly_queryable"    => $is_privileged_user,
 		"show_ui"               => true,
 		"show_in_rest"          => false,
 		"rest_base"             => "",

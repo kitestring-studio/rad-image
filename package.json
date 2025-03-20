@@ -1,15 +1,15 @@
 {
   "name": "rad-image",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "author": "Kitestring Studio",
   "license": "GPL-2.0-or-later",
-  "description": "=== Image Viewer ===\r Contributors: Gabe462\r Donate link: https://example.com/\r Tags: comments, spam\r Requires at least: 6.1\r Tested up to: 6.1.1\r Requires PHP: 7.4\r Stable tag: 0.1.0\r License: GPLv2 or later\r License URI: https://www.gnu.org/licenses/gpl-2.0.html",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist/gallery.bundle.*",
     "build": "npm run clean && webpack --mode=production",
-    "zip": "npm run build && rm -f image-viewer.zip && zip -r image-viewer.zip . -x '*.git*' '.idea/*' 'data/*' '*.DS_Store*' 'node_modules/*' 'src/*' 'package-lock.json' 'package.json' 'webpack.config.js' '.editorconfig' '.distignore'"
+    "zip": "npm run build && rm -f image-viewer-$(jq -r .version < package.json).zip && zip -r image-viewer-$(jq -r .version < package.json).zip . -x '*.git*' '.idea/*' 'data/*' '*.DS_Store*' 'node_modules/*' 'src/*' 'package-lock.json' 'package.json' 'webpack.config.js' '.editorconfig' '.distignore'"
   },
   "repository": {
     "type": "git",
@@ -21,8 +21,8 @@
   "homepage": "https://github.com/kitestring-studio/dicom-gallery#readme",
   "devDependencies": {
     "css-loader": "^6.8.1",
-    "mini-css-extract-plugin": "^2.7.6",
-    "webpack": "^5.88.2",
+    "mini-css-extract-plugin": "^2.9.0",
+    "webpack": "5.94.0",
     "webpack-cli": "^5.0.1"
   }
 }

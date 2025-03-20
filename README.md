@@ -53,6 +53,11 @@ npm run zip
 ```
 
 ## Changelog
+### 2.1.2
+- disable image_viewer post type visibility for anonymous visitors
+- `npm run build` now creates a zip filename with the version number
+- node package updates
+
 ### 2.1.1
 - fix a broken hardcoded image path
 
