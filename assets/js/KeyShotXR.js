@@ -282,8 +282,11 @@ window.keyshotXR = function (keyshot_id, w, G, Y, wa, D, xa, ya, za, Aa, Ba, L, 
 			if (this_this.ja) return;
 			e.J = u;
 			var d = parseInt(e.K * e.c + e.I);
-			if (-1 != this_this.F[ d ] && (W.setAttribute("src",
-				this_this.D[ d ]), W.complete || (this_this.ja = p), void 0 !== r)) if (d = this_this.ia[ d ], !d && void 0 == r[ d ]) {
+			// build backbuffer
+			let dElement = this_this.D[ d ];
+			// console.log("dElement: ", dElement);
+			if (-1 != this_this.F[ d ] && (W_backbuffer.setAttribute("src",
+				dElement), W_backbuffer.complete || (this_this.ja = p), void 0 !== r)) if (d = this_this.ia[ d ], !d && void 0 == r[ d ]) {
 				if (document.getElementById("xr_hotspot")) {
 					var b = document.getElementById("xr_hotspot");
 					document.body.removeChild(b)
@@ -558,7 +561,7 @@ window.keyshotXR = function (keyshot_id, w, G, Y, wa, D, xa, ya, za, Aa, Ba, L, 
 		}, k(n, "pointerdown", b.bind(t, ka)), k(n, "pointermove", b.bind(t, ia)), k(n, "pointerup", b.bind(t, ga)), k(n, "pointercancel", b.bind(t, ea))))
 	};
 	if (document.createElement("canvas").getContext) {
-		var this_this = this, v = this_this.h = t, s = t, W = t, n = t, backbuffer = t;
+		var this_this = this, v = this_this.h = t, s = t, W_backbuffer = t, n = t, backbuffer = t;
 		this_this.i = aa;
 		this_this.s = w;
 		this_this.fb = u;
@@ -666,7 +669,7 @@ window.keyshotXR = function (keyshot_id, w, G, Y, wa, D, xa, ya, za, Aa, Ba, L, 
 		style_string += z + "user-select: none;";
 		backbuffer.setAttribute("style", style_string);
 		s.appendChild(backbuffer);
-		W = backbuffer;
+		W_backbuffer = backbuffer;
 		G = function () {
 			this_this.ja = u
 		};
